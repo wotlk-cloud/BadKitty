@@ -1,0 +1,11 @@
+## Interface: 30300
+## Title: BadKitty
+## Notes: Full Feral combat watch.
+## SavedVariables: BadKittyTextColor, BadKittyWarningTextColor, BadKittyT1Colors, BadKittyT2Colors, BadKittyIdolColors, BadKittyEnchantColors, BadKittyCatPSColors, BadKittyBarTexture, BadKittyWBearCount, BadKittyWCatCount, BadKittyWCFrames, BadKittyWBFrames, BadKittySaves, BadKittyCFrames, BadKittyBFrames, BadKittyCatSRColors, BadKittyCatMangleColors, BadKittyCatRakeColors, BadKittyCatRipColors, BadKittyCatFFFColors, BadKittyCatTFColors, BadKittyCatZerkColors, BadKittyCatEnergyColors, BadKittyBearMangleColors, BadKittyBearDemoColors, BadKittyBearLacColors, BadKittyBearFFFColors, BadKittyBearBSColors, BadKittyBearZerkColors, BadKittyBearRageColors, BadKittyCatCount, BadKittyBearCount
+## Dependencies:
+BadKittyProcList.lua
+BadKittyOptions.lua
+BadKitty2.xml
+BadKittyOptions.xml
+BadKitty.lua
+BadKittyWarnings.lua

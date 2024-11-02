@@ -1,0 +1,4368 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+    xsi:schemaLocation="http://www.blizzard.com/wow/ui/
+    ..\FrameXML\UI.xsd">
+
+<!-- BadKitty Options Window! -->
+	<Script file="BadKittyOptions.lua"/>
+	
+	<Frame name="BadKittyNewVersion" hidden="true" toplevel="true" parent="UIParent">
+		<Size>
+			<AbsDimension x="520" y="375"/>
+		</Size>
+		<Anchors>
+			<Anchor point="CENTER"/>
+		</Anchors>
+		<Backdrop bgFile="Interface\DialogFrame\UI-DialogBox-Background" edgeFile="Interface\DialogFrame\UI-DialogBox-Border" tile="true">
+			<TileSize>
+				<AbsValue val="32"/>
+			</TileSize>
+			<EdgeSize>
+				<AbsValue val="32"/>
+			</EdgeSize>
+			<BackgroundInsets>
+				<AbsInset left="10" right="10" top="10" bottom="10"/>
+			</BackgroundInsets>
+        </Backdrop>
+		<Layers>
+			<Layer level="ARTWORK">
+				<FontString name="$parentTitle" justifyH="CENTER" justifyV="TOP" inherits="GameFontNormal" >
+					<Anchors>
+						<Anchor point="TOP" relativepoint="TOP">
+							<Offset>
+								<AbsDimension x="0" y="-15"/>
+							</Offset>
+						</Anchor>
+					</Anchors>
+				</FontString>
+				<FontString name="$parentText" justifyH="CENTER" justifyV="TOP" inherits="GameFontNormal">
+					<Anchors>
+						<Anchor point="TOP" relativepoint="TOP">
+							<Offset>
+								<AbsDimension x="0" y="-50"/>
+							</Offset>
+						</Anchor>
+					</Anchors>
+				</FontString>
+			</Layer>
+		</Layers>
+		<Scripts>
+			<OnLoad>
+				BadKittyNewVersionTitle:SetText("BadKitty Version 1.11!")
+				BadKittyNewVersionText:SetText("Here are the changes for this version:\n------\nUpdated for the 3.3.3 Mangle 'buff'.\n\nTrinket, idol, and enchant procs can now be shown in Cat Form!  Presently,\nit should correctly detect all melee trinkets and idols of ilevel 200 \nor above, as well as Mongoose and Berserking on your weapon.  The procs are\n tied to their respective items via a database.  If you feel an \nitem is missing, check out BadKittyProcList.lua (there are instructions), \nor tell me to add it, and I will.\n\nThe Warnings no longer show a '0' when a buff or debuff has fallen off.  \n\nYou can also adjust the color and font size of the warning text in the options menu.\n\nThe layout of the warnings can now be controlled through a less clunky \ninterface (similar to what you're probably used to in action bar mods).\n\nAs always, if there are any bugs or problems, \nor if there's something you think is missing, please let me know.  Happy shredding!")
+			</OnLoad>
+		</Scripts>
+		<Frames>
+			<Button name="$parentCloseButton" inherits="UIPanelCloseButton">
+				<Anchors>
+					<Anchor point="TOPRIGHT">
+						<Offset>
+							<AbsDimension x="-4" y="-4"/>
+						</Offset>
+					</Anchor>
+				</Anchors>
+			</Button>
+			<Button name="$parentGo" inherits="OptionsButtonTemplate" text="Take Me To The Options!">
+				<Size>	
+					<AbsDimension x="250" y="30"/>
+				</Size>
+				<Anchors>
+					<Anchor point="Bottom" relativeto="BadKittyNewVersion">
+						<Offset>
+							<AbsDimension x="0" y="18"/>
+						</Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						InterfaceOptionsFrame_OpenToCategory(BadKittyColorOptions)
+						InterfaceOptionsFrame_OpenToCategory(BadKittyOptions)
+						BadKittyNewVersion:Hide()
+					</OnClick>
+				</Scripts>
+			</Button>
+		</Frames>
+	</Frame>
+
+	<Frame name="BadKittyOptions" hidden="true" parent="UIParent">
+		<Scripts>
+			<OnLoad>
+				<!--BadKittyOptionsTitle:SetText("BadKitty Options!");
+				BadKittyOptionsTitle:SetFont("Fonts\\FRIZQT__.TTF", 15)-->
+				BadKitty_OLoad(self)
+			</OnLoad>
+			<OnShow>
+				BadKittyOptionsCheckLock:SetChecked(BadKittyLock)
+				BadKittyOptionsCheckCombatHide:SetChecked(BadKittySaves[7])
+				BadKittyOptionsCheckOOC:SetChecked(BadKittySaves[10])
+			</OnShow>
+		</Scripts>
+		<Layers>
+			<Layer level="BACKGROUND">
+				<Texture name="$parent_Background" setAllPoints="true">
+					<Color r=".1" g=".1" b=".1" a="0.5" /> 
+				</Texture>
+			</Layer>
+			<Layer level="ARTWORK">
+				<FontString name="$parentText" inherits="GameFontNormalLarge" text="BadKitty!">
+					<Anchors>
+						<Anchor point="TOP">
+							<Offset>
+								<AbsDimension x="0" y="-15"/>
+							</Offset>
+						</Anchor>
+					</Anchors>
+				</FontString>
+				<FontString name="$parentBKWModDesc" inherits="NumberFontNormal" text="|c00FF0000Out of Range, |c00FFFF00Not Behind Target, |c00C0C0C0Target Dead, |c000000FFTarget Non-Hostile">
+					<Anchors>
+						<Anchor point="TOP">
+							<Offset>
+								<AbsDimension x="15" y="-395"/>
+							</Offset>
+						</Anchor>
+					</Anchors>
+				</FontString>
+			</Layer>
+		</Layers>
+		<Frames>
+			<CheckButton name="$parentCheckCatWarnings" inherits="UICheckButtonTemplate">
+				<Size>
+					<AbsDimension x="25" y="25"/>
+				</Size>
+				<Anchors>
+					<Anchor point="TOPLEFT" relativeto="BadKittyOptions">
+						<Offset>
+							<AbsDimension x="20" y="-60"/>
+						</Offset>
+					</Anchor>
+				</Anchors>      
+				<Scripts>
+					<OnLoad>
+						getglobal(this:GetName().."Text"):SetText("Cat Warnings");
+						BadKittyOptionsCheckCatWarnings:SetChecked(BadKittySaves[11])
+					</OnLoad>
+					<OnShow>
+						BadKittyOptionsCheckCatWarnings:SetChecked(BadKittySaves[11])
+					</OnShow>
+					<OnClick>
+						BadKitty_CWarn()
+					</OnClick>
+				</Scripts>
+			</CheckButton>
+			<CheckButton name="$parentCheckCatBars" inherits="UICheckButtonTemplate">
+				<Size>
+					<AbsDimension x="25" y="25"/>
+				</Size>
+				<Anchors>
+					<Anchor point="TOPLEFT" relativeto="BadKittyOptions">
+						<Offset>
+							<AbsDimension x="20" y="-85"/>
+						</Offset>
+					</Anchor>
+				</Anchors>      
+				<Scripts>
+					<OnLoad>
+						getglobal(this:GetName().."Text"):SetText("Cat Bars");
+					</OnLoad>
+					<OnShow>
+						BadKittyOptionsCheckCatBars:SetChecked(BadKittySaves[9])
+					</OnShow>
+					<OnClick>
+						BadKitty_CBar()
+					</OnClick>
+				</Scripts>
+			</CheckButton>
+			<CheckButton name="$parentCheckBearWarnings" inherits="UICheckButtonTemplate">
+				<Size>
+					<AbsDimension x="25" y="25"/>
+				</Size>
+				<Anchors>
+					<Anchor point="TOPLEFT" relativeto="BadKittyOptions">
+						<Offset>
+							<AbsDimension x="120" y="-60"/>
+						</Offset>
+					</Anchor>
+				</Anchors>      
+				<Scripts>
+					<OnLoad>
+						getglobal(this:GetName().."Text"):SetText("Bear Warnings");
+						BadKittyOptionsCheckBearWarnings:SetChecked(BadKittySaves[8])
+					</OnLoad>
+					<OnShow>
+						BadKittyOptionsCheckBearWarnings:SetChecked(BadKittySaves[8])
+					</OnShow>
+					<OnClick>
+						BadKitty_BWarn()
+					</OnClick>
+				</Scripts>
+			</CheckButton>
+			<CheckButton name="$parentCheckBearBars" inherits="UICheckButtonTemplate">
+				<Size>
+					<AbsDimension x="25" y="25"/>
+				</Size>
+				<Anchors>
+					<Anchor point="TOPLEFT" relativeto="BadKittyOptions">
+						<Offset>
+							<AbsDimension x="120" y="-85"/>
+						</Offset>
+					</Anchor>
+				</Anchors>      
+				<Scripts>
+					<OnLoad>
+						getglobal(this:GetName().."Text"):SetText("Bear Bars");
+					</OnLoad>
+					<OnShow>
+						BadKittyOptionsCheckBearBars:SetChecked(BadKittySaves[5])
+					</OnShow>
+					<OnClick>
+						BadKitty_BBar()
+					</OnClick>
+				</Scripts>
+			</CheckButton>
+			<CheckButton name="$parentCheckCombatHide" inherits="UICheckButtonTemplate">
+				<Size>
+					<AbsDimension x="25" y="25"/>
+				</Size>
+				<Anchors>
+					<Anchor point="TOPLEFT" relativeto="BadKittyOptions">
+						<Offset>
+							<AbsDimension x="180" y="-110"/>
+						</Offset>
+					</Anchor>
+				</Anchors>      
+				<Scripts>
+					<OnLoad>
+						getglobal(this:GetName().."Text"):SetText("Hidden Out of Combat");
+						BadKittyOptionsCheckCombatHide:SetChecked(BadKittySaves[7])
+					</OnLoad>
+
+					<OnClick>
+						BadKitty_CombatHide()
+					</OnClick>
+				</Scripts>
+			</CheckButton>
+			<CheckButton name="$parentCheckLock" inherits="UICheckButtonTemplate">
+				<Size>
+					<AbsDimension x="25" y="25"/>
+				</Size>
+				<Anchors>
+					<Anchor point="TOPLEFT" relativeto="BadKittyOptions">
+						<Offset>
+							<AbsDimension x="20" y="-110"/>
+						</Offset>
+					</Anchor>
+				</Anchors>      
+				<Scripts>
+					<OnShow>
+						getglobal(this:GetName().."Text"):SetText("Lock Frames (/bk lock)");
+						BadKittyOptionsCheckLock:SetChecked(BadKittyLock)
+					</OnShow>
+					<OnClick>
+						BadKitty_Lock()
+					</OnClick>
+				</Scripts>
+			</CheckButton>
+			<CheckButton name="$parentCheckOOC" inherits="UICheckBUttonTemplate">
+				<Size>
+					<AbsDimension x="25" y="25"/>
+				</Size>
+				<Anchors>
+					<Anchor point="TOPLEFT" relativeto="BadKittyOptions">
+						<Offset>
+							<AbsDimension x="20" y="-135"/>
+						</Offset>
+					</Anchor>
+				</Anchors>      
+				<Scripts>
+					<OnLoad>
+						getglobal(this:GetName().."Text"):SetText("Bar Frame OoC Warning");
+						BadKittyOptionsCheckOOC:SetChecked(BadKittySaves[10])
+					</OnLoad>
+					<OnShow>
+						BadKittyOptionsCheckOOC:SetChecked(BadKittySaves[10])
+					</OnShow>
+					<OnClick>
+						BadKitty_OOCToggle()
+					</OnClick>
+				</Scripts>
+			</CheckButton>
+			<CheckButton name="$parentCheckRatio" inherits="UICheckBUttonTemplate">
+				<Size>
+					<AbsDimension x="25" y="25"/>
+				</Size>
+				<Anchors>
+					<Anchor point="TOPLEFT" relativeto="BadKittyOptions">
+						<Offset>
+							<AbsDimension x="180" y="-135"/>
+						</Offset>
+					</Anchor>
+				</Anchors>      
+				<Scripts>
+					<OnLoad>
+						getglobal(this:GetName().."Text"):SetText("Bars Scale with Cooldown Length");
+						BadKittyOptionsCheckRatio:SetChecked(BadKittySaves[4])
+					</OnLoad>
+					<OnShow>
+						BadKittyOptionsCheckRatio:SetChecked(BadKittySaves[4])
+					</OnShow>
+					<OnClick>
+						BadKitty_RatioToggle()
+					</OnClick>
+				</Scripts>
+			</CheckButton>
+			<CheckButton name="$parentColorBlind" inherits="UICheckBUttonTemplate">
+				<Size>
+					<AbsDimension x="25" y="25"/>
+				</Size>
+				<Anchors>
+					<Anchor point="TOPLEFT" relativeto="BadKittyOptions">
+						<Offset>
+							<AbsDimension x="20" y="-160"/>
+						</Offset>
+					</Anchor>
+				</Anchors>      
+				<Scripts>
+					<OnLoad>
+						getglobal(this:GetName().."Text"):SetText("Colorblind Mode");
+						BadKittyOptionsColorBlind:SetChecked(BadKittySaves[18])
+					</OnLoad>
+					<OnShow>
+						BadKittyOptionsColorBlind:SetChecked(1-BadKittySaves[18])
+					</OnShow>
+					<OnClick>
+						BadKitty_ColorBlind()
+					</OnClick>
+				</Scripts>
+			</CheckButton>
+			<CheckButton name="$parentBKWMod" inherits="UICheckBUttonTemplate">
+				<Size>
+					<AbsDimension x="25" y="25"/>
+				</Size>
+				<Anchors>
+					<Anchor point="TOPLEFT" relativeto="BadKittyOptions">
+						<Offset>
+							<AbsDimension x="20" y="-365"/>
+						</Offset>
+					</Anchor>
+				</Anchors>      
+				<Scripts>
+					<OnLoad>
+						getglobal(this:GetName().."Text"):SetText("Bar Background Colors");
+						BadKittyOptionsBKWMod:SetChecked(BadKittySaves[17])
+					</OnLoad>
+					<OnShow>
+						BadKittyOptionsBKWMod:SetChecked(BadKittySaves[17])
+					</OnShow>
+					<OnClick>
+						BadKitty_BKWModToggle()
+					</OnClick>
+				</Scripts>
+			</CheckButton>
+			<CheckButton name="$parentZerkDuration" inherits="UICheckBUttonTemplate">
+				<Size>
+					<AbsDimension x="25" y="25"/>
+				</Size>
+				<Anchors>
+					<Anchor point="TOPLEFT" relativeto="BadKittyOptions">
+						<Offset>
+							<AbsDimension x="180" y="-160"/>
+						</Offset>
+					</Anchor>
+				</Anchors>      
+				<Scripts>
+					<OnLoad>
+						getglobal(this:GetName().."Text"):SetText("Show Berserk Duration");
+						BadKittyOptionsZerkDuration:SetChecked(BadKittySaves[21])
+					</OnLoad>
+					<OnShow>
+						BadKittyOptionsZerkDuration:SetChecked(BadKittySaves[21])
+					</OnShow>
+					<OnClick>
+						BadKitty_Zerk()
+					</OnClick>
+				</Scripts>
+			</CheckButton>
+			<Button name="$parentCenter" inherits="OptionsButtonTemplate" text="Center Frames">
+				<Size>	
+					<AbsDimension x="150" y="25"/>
+				</Size>
+				<Anchors>
+					<Anchor point="TOPLEFT" relativeto="BadKittyOptions">
+						<Offset>
+							<AbsDimension x="20" y="-225"/>
+						</Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						BadKitty_CenterFrame()
+					</OnClick>
+				</Scripts>
+			</Button>
+			<Slider name="$parentWidth" orientation="HORIZONTAL" minValue="95" maxValue="400">
+				<Size>
+					<AbsDimension x="128" y="16"/>
+				</Size>
+				<Anchors>
+					<Anchor point="TOPLEFT" relativeto="BadKittyOptions">
+						<Offset>
+							<AbsDimension x="30" y="-275"/>
+						</Offset>
+					</Anchor>
+				</Anchors>
+				<Backdrop bgFile="Interface\Buttons\UI-SliderBar-Background" edgeFile="Interface\Buttons\UI-SliderBar-Border" tile="true">
+					<EdgeSize>
+						<AbsValue val="8"/>
+					</EdgeSize>
+					<TileSize>
+						<AbsValue val="8"/>
+					</TileSize>
+					<BackgroundInsets>
+						<AbsInset left="3" right="3" top="6" bottom="6"/>
+					</BackgroundInsets>
+				</Backdrop>
+				<ThumbTexture file="Interface\Buttons\UI-SliderBar-Button-Horizontal">
+					<Size>
+						<AbsDimension x="32" y="32"/>
+					</Size>
+				</ThumbTexture>
+				<Layers>
+					<Layer level="ARTWORK">
+						<FontString name="$parentText" inherits="GameFontNormalSmall" text="Bar Width">
+							<Anchors>
+								<Anchor point="CENTER" relativeto="BadKittyOptionsWidth">
+									<Offset>
+										<AbsDimension x="0" y="15"/>
+									</Offset>
+								</Anchor>
+							</Anchors>
+						</FontString>
+					</Layer>
+				</Layers>
+				<Scripts>
+					<OnShow>
+						this:SetValue(BadKittySaves[2])
+					</OnShow>
+					<OnValueChanged>
+						BadKitty_Resize()
+					</OnValueChanged>
+				</Scripts>
+			</Slider>
+			<Slider name="$parentHeight" orientation="HORIZONTAL" minValue="10" maxValue="30">
+				<Size>
+					<AbsDimension x="128" y="16"/>
+				</Size>
+				<Anchors>
+					<Anchor point="TOPLEFT" relativeto="BadKittyOptions">
+						<Offset>
+							<AbsDimension x="30" y="-305"/>
+						</Offset>
+					</Anchor>
+				</Anchors>
+				<Backdrop bgFile="Interface\Buttons\UI-SliderBar-Background" edgeFile="Interface\Buttons\UI-SliderBar-Border" tile="true">
+					<EdgeSize>
+						<AbsValue val="8"/>
+					</EdgeSize>
+					<TileSize>
+						<AbsValue val="8"/>
+					</TileSize>
+					<BackgroundInsets>
+						<AbsInset left="3" right="3" top="6" bottom="6"/>
+					</BackgroundInsets>
+				</Backdrop>
+				<ThumbTexture file="Interface\Buttons\UI-SliderBar-Button-Horizontal">
+					<Size>
+						<AbsDimension x="32" y="32"/>
+					</Size>
+				</ThumbTexture>
+				<Layers>
+					<Layer level="ARTWORK">
+						<FontString name="$parentText" inherits="GameFontNormalSmall" text="Bar Height">
+							<Anchors>
+								<Anchor point="CENTER" relativeto="BadKittyOptionsHeight">
+									<Offset>
+										<AbsDimension x="0" y="15"/>
+									</Offset>
+								</Anchor>
+							</Anchors>
+						</FontString>
+					</Layer>
+				</Layers>
+				<Scripts>
+					<OnShow>
+						this:SetValue(BadKittySaves[1])
+					</OnShow>
+					<OnValueChanged>
+						BadKitty_Resize()
+					</OnValueChanged>
+				</Scripts>
+			</Slider>
+			<Slider name="$parentWarningFont" orientation="HORIZONTAL" minValue="1" maxValue="40" valueStep="1">
+				<Size>
+					<AbsDimension x="128" y="16"/>
+				</Size>
+				<Anchors>
+					<Anchor point="TOPLEFT" relativeto="BadKittyOptions">
+						<Offset>
+							<AbsDimension x="230" y="-240"/>
+						</Offset>
+					</Anchor>
+				</Anchors>
+				<Backdrop bgFile="Interface\Buttons\UI-SliderBar-Background" edgeFile="Interface\Buttons\UI-SliderBar-Border" tile="true">
+					<EdgeSize>
+						<AbsValue val="8"/>
+					</EdgeSize>
+					<TileSize>
+						<AbsValue val="8"/>
+					</TileSize>
+					<BackgroundInsets>
+						<AbsInset left="3" right="3" top="6" bottom="6"/>
+					</BackgroundInsets>
+				</Backdrop>
+				<ThumbTexture file="Interface\Buttons\UI-SliderBar-Button-Horizontal">
+					<Size>
+						<AbsDimension x="32" y="32"/>
+					</Size>
+				</ThumbTexture>
+				<Layers>
+					<Layer level="ARTWORK">
+						<FontString name="$parentText" inherits="GameFontNormalSmall" text="Warning Font">
+							<Anchors>
+								<Anchor point="CENTER" relativeto="BadKittyOptionsWarningFont">
+									<Offset>
+										<AbsDimension x="0" y="15"/>
+									</Offset>
+								</Anchor>
+							</Anchors>
+						</FontString>
+						<FontString name="$parentDisplay" inherits="GameFontNormalSmall">
+							<Anchors>
+								<Anchor point="RIGHT" relativeto="BadKittyOptionsWarningFont">
+									<Offset>
+										<AbsDimension x="15" y="0"/>
+									</Offset>
+								</Anchor>
+							</Anchors>
+						</FontString>
+					</Layer>
+				</Layers>
+				<Scripts>
+					<OnLoad>
+						this:SetValue(BadKittySaves[19])
+						--BadKittyOptionsWarningFontDisplay:SetText(BadKittySaves[19])
+					</OnLoad>
+					<OnValueChanged>
+						BadKittySaves[19] = this:GetValue()
+						--BadKittyOptionsWarningFontDisplay:SetText(BadKittySaves[19])
+						if BadKittyThisIsStupid==1 then BadKitty_Setup() end
+					</OnValueChanged>
+				</Scripts>
+			</Slider>
+			<Slider name="$parentTimer" orientation="HORIZONTAL" minValue="0" maxValue="9" valueStep="1">
+				<Size>
+					<AbsDimension x="128" y="16"/>
+				</Size>
+				<Anchors>
+					<Anchor point="TOPLEFT" relativeto="BadKittyOptions">
+						<Offset>
+							<AbsDimension x="230" y="-335"/>
+						</Offset>
+					</Anchor>
+				</Anchors>
+				<Backdrop bgFile="Interface\Buttons\UI-SliderBar-Background" edgeFile="Interface\Buttons\UI-SliderBar-Border" tile="true">
+					<EdgeSize>
+						<AbsValue val="8"/>
+					</EdgeSize>
+					<TileSize>
+						<AbsValue val="8"/>
+					</TileSize>
+					<BackgroundInsets>
+						<AbsInset left="3" right="3" top="6" bottom="6"/>
+					</BackgroundInsets>
+				</Backdrop>
+				<ThumbTexture file="Interface\Buttons\UI-SliderBar-Button-Horizontal">
+					<Size>
+						<AbsDimension x="32" y="32"/>
+					</Size>
+				</ThumbTexture>
+				<Layers>
+					<Layer level="ARTWORK">
+						<FontString name="$parentText" inherits="GameFontNormalSmall" text="Warning Threshold">
+							<Anchors>
+								<Anchor point="CENTER" relativeto="BadKittyOptionsTimer">
+									<Offset>
+										<AbsDimension x="0" y="15"/>
+									</Offset>
+								</Anchor>
+							</Anchors>
+						</FontString>
+						<FontString name="$parentDisplay" inherits="GameFontNormalSmall">
+							<Anchors>
+								<Anchor point="RIGHT" relativeto="BadKittyOptionsTimer">
+									<Offset>
+										<AbsDimension x="15" y="0"/>
+									</Offset>
+								</Anchor>
+							</Anchors>
+						</FontString>
+					</Layer>
+				</Layers>
+				<Scripts>
+					<OnLoad>
+						this:SetValue(BadKittySaves[12])
+					</OnLoad>
+					<OnValueChanged>
+						BadKitty_Timer()
+						BadKittyOptionsTimerDisplay:SetText(BadKittySaves[12])
+					</OnValueChanged>
+				</Scripts>
+			</Slider>
+			<Slider name="$parentFont" orientation="HORIZONTAL" minValue="8" maxValue="25" valueStep="1">
+				<Size>
+					<AbsDimension x="128" y="16"/>
+				</Size>
+				<Anchors>
+					<Anchor point="TOPLEFT" relativeto="BadKittyOptions">
+						<Offset>
+							<AbsDimension x="30" y="-335"/>
+						</Offset>
+					</Anchor>
+				</Anchors>
+				<Backdrop bgFile="Interface\Buttons\UI-SliderBar-Background" edgeFile="Interface\Buttons\UI-SliderBar-Border" tile="true">
+					<EdgeSize>
+						<AbsValue val="8"/>
+					</EdgeSize>
+					<TileSize>
+						<AbsValue val="8"/>
+					</TileSize>
+					<BackgroundInsets>
+						<AbsInset left="3" right="3" top="6" bottom="6"/>
+					</BackgroundInsets>
+				</Backdrop>
+				<ThumbTexture file="Interface\Buttons\UI-SliderBar-Button-Horizontal">
+					<Size>
+						<AbsDimension x="32" y="32"/>
+					</Size>
+				</ThumbTexture>
+				<Layers>
+					<Layer level="ARTWORK">
+						<FontString name="$parentText" inherits="GameFontNormalSmall" text="Bar Font">
+							<Anchors>
+								<Anchor point="CENTER" relativeto="BadKittyOptionsFont">
+									<Offset>
+										<AbsDimension x="0" y="15"/>
+									</Offset>
+								</Anchor>
+							</Anchors>
+						</FontString>
+						<FontString name="$parentDisplay" inherits="GameFontNormalSmall">
+							<Anchors>
+								<Anchor point="RIGHT" relativeto="BadKittyOptionsFont">
+									<Offset>
+										<AbsDimension x="15" y="0"/>
+									</Offset>
+								</Anchor>
+							</Anchors>
+						</FontString>
+					</Layer>
+				</Layers>
+				<Scripts>
+					<OnShow>
+						this:SetValue(BadKittySaves[6])
+					</OnShow>
+					<OnValueChanged>
+						--BadKittyOptionsFontDisplay:SetText(BadKittySaves[6])
+						BadKitty_Font()
+					</OnValueChanged>
+				</Scripts>
+			</Slider>
+			<Slider name="$parentAlpha" orientation="HORIZONTAL" minValue="0" maxValue="1">
+				<Size>
+					<AbsDimension x="128" y="16"/>
+				</Size>
+				<Anchors>
+					<Anchor point="TOPLEFT" relativeto="BadKittyOptions">
+						<Offset>
+							<AbsDimension x="230" y="-275"/>
+						</Offset>
+					</Anchor>
+				</Anchors>
+				<Backdrop bgFile="Interface\Buttons\UI-SliderBar-Background" edgeFile="Interface\Buttons\UI-SliderBar-Border" tile="true">
+					<EdgeSize>
+						<AbsValue val="8"/>
+					</EdgeSize>
+					<TileSize>
+						<AbsValue val="8"/>
+					</TileSize>
+					<BackgroundInsets>
+						<AbsInset left="3" right="3" top="6" bottom="6"/>
+					</BackgroundInsets>
+				</Backdrop>
+				<ThumbTexture file="Interface\Buttons\UI-SliderBar-Button-Horizontal">
+					<Size>
+						<AbsDimension x="32" y="32"/>
+					</Size>
+				</ThumbTexture>
+				<Layers>
+					<Layer level="ARTWORK">
+						<FontString name="$parentText" inherits="GameFontNormalSmall" text="Warning Opacity">
+							<Anchors>
+								<Anchor point="CENTER" relativeto="BadKittyOptionsAlpha">
+									<Offset>
+										<AbsDimension x="0" y="15"/>
+									</Offset>
+								</Anchor>
+							</Anchors>
+						</FontString>
+						<FontString name="$parentDisplay" inherits="GameFontNormalSmall">
+							<Anchors>
+								<Anchor point="RIGHT" relativeto="BadKittyOptionsAlpha">
+									<Offset>
+										<AbsDimension x="20" y="0"/>
+									</Offset>
+								</Anchor>
+							</Anchors>
+						</FontString>
+					</Layer>
+				</Layers>
+				<Scripts>
+					<OnShow>
+						this:SetValue(BadKittySaves[13])
+					</OnShow>
+					<OnValueChanged>
+						BadKittyOptionsAlphaDisplay:SetText(floor(BadKittySaves[13]*10)/10)
+						BadKittySaves[13]=this:GetValue()
+						BadKitty_SetFrames()
+					</OnValueChanged>
+				</Scripts>
+			</Slider>
+			<Slider name="$parentSize" orientation="HORIZONTAL" minValue="20" maxValue="150">
+				<Size>
+					<AbsDimension x="128" y="16"/>
+				</Size>
+				<Anchors>
+					<Anchor point="TOPLEFT" relativeto="BadKittyOptions">
+						<Offset>
+							<AbsDimension x="230" y="-305"/>
+						</Offset>
+					</Anchor>
+				</Anchors>
+				<Backdrop bgFile="Interface\Buttons\UI-SliderBar-Background" edgeFile="Interface\Buttons\UI-SliderBar-Border" tile="true">
+					<EdgeSize>
+						<AbsValue val="8"/>
+					</EdgeSize>
+					<TileSize>
+						<AbsValue val="8"/>
+					</TileSize>
+					<BackgroundInsets>
+						<AbsInset left="3" right="3" top="6" bottom="6"/>
+					</BackgroundInsets>
+				</Backdrop>
+				<ThumbTexture file="Interface\Buttons\UI-SliderBar-Button-Horizontal">
+					<Size>
+						<AbsDimension x="32" y="32"/>
+					</Size>
+				</ThumbTexture>
+				<Layers>
+					<Layer level="ARTWORK">
+						<FontString name="$parentText" inherits="GameFontNormalSmall" text="Warning Size">
+							<Anchors>
+								<Anchor point="CENTER" relativeto="BadKittyOptionsSize">
+									<Offset>
+										<AbsDimension x="0" y="15"/>
+									</Offset>
+								</Anchor>
+							</Anchors>
+						</FontString>
+						<FontString name="$parentDisplay" inherits="GameFontNormalSmall">
+							<Anchors>
+								<Anchor point="RIGHT" relativeto="BadKittyOptionsSize">
+									<Offset>
+										<AbsDimension x="20" y="0"/>
+									</Offset>
+								</Anchor>
+							</Anchors>
+						</FontString>
+					</Layer>
+				</Layers>
+				<Scripts>
+					<OnShow>
+						this:SetValue(BadKittySaves[16])
+					</OnShow>
+					<OnValueChanged>
+						BadKittyOptionsSizeDisplay:SetText(floor(BadKittySaves[16]))
+						BadKittySaves[16]=this:GetValue()
+						BadKitty_SetFrames()
+					</OnValueChanged>
+				</Scripts>
+			</Slider>
+			<Button name="$parentTextColor">
+			<Size>
+				<AbsDimension x="15" y="15"/>
+			</Size>
+			<Anchors>
+				<Anchor point="TOPLEFT">
+					<Offset>
+						<AbsDimension x="20" y="-200"/>
+					</Offset>
+				</Anchor>
+			</Anchors>
+			<Layers>
+				<Layer>
+					<Texture name = "$parentTexture">
+						<Size>
+							<AbsDimension x="15" y="15"/>
+						</Size>
+					</Texture>
+				</Layer>
+				<Layer>	
+					<FontString name="$parentText" inherits="GameFontNormalSmall" text="Bar Text Color">
+						<Anchors>
+							<Anchor point="LEFT" relativepoint="RIGHT"/>
+						</Anchors>
+					</FontString>
+				</Layer>
+			</Layers>
+			<Scripts>
+				<OnShow>
+					BadKittyOptionsTextColorTexture:SetTexture(BadKittyTextColor[1],BadKittyTextColor[2],BadKittyTextColor[3])
+				</OnShow>
+				<OnClick>
+					BadKittyColorTempFrame = this:GetName()
+					ColorPickerFrame.cancelFunc = nil 
+					ColorPickerFrame.func = nil 
+					ColorPickerFrame.cancelFunc = BadKitty_CancelTextColor
+					ColorPickerFrame:SetColorRGB(unpack(BadKittyTextColor))
+					ColorPickerFrame.func = BadKitty_SetTextColor
+					ColorPickerFrame.previousValues = BadKittyTextColor
+					ColorPickerFrame:Show()
+				</OnClick> 
+			</Scripts>
+		</Button>
+		<Button name="$parentWarningTextColor">
+			<Size>
+				<AbsDimension x="15" y="15"/>
+			</Size>
+			<Anchors>
+				<Anchor point="TOPLEFT">
+					<Offset>
+						<AbsDimension x="220" y="-200"/>
+					</Offset>
+				</Anchor>
+			</Anchors>
+			<Layers>
+				<Layer>
+					<Texture name = "$parentTexture">
+						<Size>
+							<AbsDimension x="15" y="15"/>
+						</Size>
+					</Texture>
+				</Layer>
+				<Layer>	
+					<FontString name="$parentText" inherits="GameFontNormalSmall" text="Warning Text Color">
+						<Anchors>
+							<Anchor point="LEFT" relativepoint="RIGHT"/>
+						</Anchors>
+					</FontString>
+				</Layer>
+			</Layers>
+			<Scripts>
+				<OnShow>
+					BadKittyOptionsWarningTextColorTexture:SetTexture(BadKittyWarningTextColor[1],BadKittyWarningTextColor[2],BadKittyWarningTextColor[3])
+				</OnShow>
+				<OnClick>
+					BadKittyColorTempFrame = this:GetName()
+					ColorPickerFrame.cancelFunc = nil 
+					ColorPickerFrame.func = nil 
+					ColorPickerFrame.cancelFunc = BadKitty_CancelWarningTextColor
+					ColorPickerFrame:SetColorRGB(unpack(BadKittyWarningTextColor))
+					ColorPickerFrame.func = BadKitty_SetWarningTextColor
+					ColorPickerFrame.previousValues = BadKittyWarningTextColor
+					ColorPickerFrame:Show()
+				</OnClick> 
+			</Scripts>
+		</Button>
+		</Frames>
+	</Frame>
+	<Frame name="BadKittyColorOptions" inherits="UIParent">
+		<Scripts>
+			<OnLoad>
+				BadKitty_OptionsLoad(self,"Bar Color and Texture")
+				BadKittyColorOptionsTextureText:SetText("Select a bar texture!                      Example")
+			</OnLoad>
+		</Scripts>
+		<Layers>
+			<Layer level="BACKGROUND">
+				<Texture name="$parent_Background" setAllPoints="true">
+					<Color r=".1" g=".1" b=".1" a="0.5" /> 
+				</Texture>
+			</Layer>
+			<Layer>	
+				<FontString name="$parentText" inherits="GameFontNormalLarge" text="Cat Bar Colors">
+					<Anchors>
+						<Anchor point="TOPLEFT">
+							<Offset><AbsDimension x="20" y="-30"/></Offset>
+						</Anchor>
+					</Anchors>
+				</FontString>
+				<FontString name="$parentText2" inherits="GameFontNormalLarge" text="Bear Bar Colors">
+					<Anchors>
+						<Anchor point="TOPLEFT">
+							<Offset><AbsDimension x="200" y="-30"/></Offset>
+						</Anchor>
+					</Anchors>
+				</FontString>
+				<FontString name="$parentTextureText" inherits="NumberFontNormal" >
+					<Anchors>
+						<Anchor point="TOPLEFT">
+							<Offset>
+								<AbsDimension x="40" y="-365"/>
+							</Offset>
+						</Anchor>
+					</Anchors>
+				</FontString>
+			</Layer>
+		</Layers>
+		<Frames>
+		<Button name="$parentCatSR">
+			<Size>
+				<AbsDimension x="15" y="15"/>
+			</Size>
+			<Anchors>
+				<Anchor point="TOPLEFT">
+					<Offset>
+						<AbsDimension x="20" y="-55"/>
+					</Offset>
+				</Anchor>
+			</Anchors>
+			<Layers>
+				<Layer>
+					<Texture name = "$parentTexture">
+						<Size>
+							<AbsDimension x="15" y="15"/>
+						</Size>
+					</Texture>
+				</Layer>
+				<Layer>	
+					<FontString name="$parentText" inherits="GameFontNormalSmall" text="Savage Roar">
+						<Anchors>
+							<Anchor point="LEFT" relativepoint="RIGHT"/>
+						</Anchors>
+					</FontString>
+				</Layer>
+			</Layers>
+			<Scripts>
+				<OnShow>
+					BadKittyColorOptionsCatSRTexture:SetTexture(BadKittyCatSRColors[1],BadKittyCatSRColors[2],BadKittyCatSRColors[3])
+				</OnShow>
+				<OnClick>
+					BadKittyColorTempFrame = this:GetName()
+					ColorPickerFrame.cancelFunc = nil 
+					ColorPickerFrame.func = nil 
+					ColorPickerFrame.cancelFunc = BadKitty_CancelColor
+					ColorPickerFrame:SetColorRGB(unpack(BadKittyCatSRColors))
+					ColorPickerFrame.func = BadKitty_SetColor
+					ColorPickerFrame.previousValues = BadKittyCatSRColors 
+					ColorPickerFrame:Show()
+				</OnClick> 
+			</Scripts>
+		</Button>
+		<Button name="$parentCatMangle">
+			<Size>
+				<AbsDimension x="15" y="15"/>
+			</Size>
+			<Anchors>
+				<Anchor point="TOPLEFT">
+					<Offset>
+						<AbsDimension x="20" y="-80"/>
+					</Offset>
+				</Anchor>
+			</Anchors>
+			<Layers>
+				<Layer>
+					<Texture name = "$parentTexture">
+						<Size>
+							<AbsDimension x="15" y="15"/>
+						</Size>
+					</Texture>
+				</Layer>
+				<Layer>	
+					<FontString name="$parentText" inherits="GameFontNormalSmall" text="Mangle">
+						<Anchors>
+							<Anchor point="LEFT" relativepoint="RIGHT"/>
+						</Anchors>
+					</FontString>
+				</Layer>
+			</Layers>
+			<Scripts>
+				<OnShow>
+					BadKittyColorOptionsCatMangleTexture:SetTexture(BadKittyCatMangleColors[1],BadKittyCatMangleColors[2],BadKittyCatMangleColors[3])
+				</OnShow>
+				<OnClick>
+					BadKittyColorTempFrame = this:GetName()
+					ColorPickerFrame.cancelFunc = nil 
+					ColorPickerFrame.func = nil 
+					ColorPickerFrame.cancelFunc = BadKitty_CancelColor
+					ColorPickerFrame:SetColorRGB(unpack(BadKittyCatMangleColors))
+					ColorPickerFrame.func = BadKitty_SetColor
+					ColorPickerFrame.previousValues = BadKittyCatMangleColors 
+					ColorPickerFrame:Show()
+				</OnClick> 
+			</Scripts>
+		</Button>
+		<Button name="$parentCatRake">
+			<Size>
+				<AbsDimension x="15" y="15"/>
+			</Size>
+			<Anchors>
+				<Anchor point="TOPLEFT">
+					<Offset>
+						<AbsDimension x="20" y="-105"/>
+					</Offset>
+				</Anchor>
+			</Anchors>
+			<Layers>
+				<Layer>
+					<Texture name = "$parentTexture">
+						<Size>
+							<AbsDimension x="15" y="15"/>
+						</Size>
+					</Texture>
+				</Layer>
+				<Layer>	
+					<FontString name="$parentText" inherits="GameFontNormalSmall" text="Rake">
+						<Anchors>
+							<Anchor point="LEFT" relativepoint="RIGHT"/>
+						</Anchors>
+					</FontString>
+				</Layer>
+			</Layers>
+			<Scripts>
+				<OnShow>
+					BadKittyColorOptionsCatRakeTexture:SetTexture(BadKittyCatRakeColors[1],BadKittyCatRakeColors[2],BadKittyCatRakeColors[3])
+				</OnShow>
+				<OnClick>
+					BadKittyColorTempFrame = this:GetName()
+					ColorPickerFrame.cancelFunc = nil 
+					ColorPickerFrame.func = nil 
+					ColorPickerFrame.cancelFunc = BadKitty_CancelColor
+					ColorPickerFrame:SetColorRGB(unpack(BadKittyCatRakeColors))
+					ColorPickerFrame.func = BadKitty_SetColor
+					ColorPickerFrame.previousValues = BadKittyCatRakeColors 
+					ColorPickerFrame:Show()
+				</OnClick> 
+			</Scripts>
+		</Button>
+		<Button name="$parentCatRip">
+			<Size>
+				<AbsDimension x="15" y="15"/>
+			</Size>
+			<Anchors>
+				<Anchor point="TOPLEFT">
+					<Offset>
+						<AbsDimension x="20" y="-130"/>
+					</Offset>
+				</Anchor>
+			</Anchors>
+			<Layers>
+				<Layer>
+					<Texture name = "$parentTexture">
+						<Size>
+							<AbsDimension x="15" y="15"/>
+						</Size>
+					</Texture>
+				</Layer>
+				<Layer>	
+					<FontString name="$parentText" inherits="GameFontNormalSmall" text="Rip">
+						<Anchors>
+							<Anchor point="LEFT" relativepoint="RIGHT"/>
+						</Anchors>
+					</FontString>
+				</Layer>
+			</Layers>
+			<Scripts>
+				<OnShow>
+					BadKittyColorOptionsCatRipTexture:SetTexture(BadKittyCatRipColors[1],BadKittyCatRipColors[2],BadKittyCatRipColors[3])
+				</OnShow>
+				<OnClick>
+					BadKittyColorTempFrame = this:GetName()
+					ColorPickerFrame.cancelFunc = nil 
+					ColorPickerFrame.func = nil 
+					ColorPickerFrame.cancelFunc = BadKitty_CancelColor
+					ColorPickerFrame:SetColorRGB(unpack(BadKittyCatRipColors))
+					ColorPickerFrame.func = BadKitty_SetColor
+					ColorPickerFrame.previousValues = BadKittyCatRipColors 
+					ColorPickerFrame:Show()
+				</OnClick> 
+			</Scripts>
+		</Button>
+		<Button name="$parentCatFFF">
+			<Size>
+				<AbsDimension x="15" y="15"/>
+			</Size>
+			<Anchors>
+				<Anchor point="TOPLEFT">
+					<Offset>
+						<AbsDimension x="20" y="-155"/>
+					</Offset>
+				</Anchor>
+			</Anchors>
+			<Layers>
+				<Layer>
+					<Texture name = "$parentTexture">
+						<Size>
+							<AbsDimension x="15" y="15"/>
+						</Size>
+					</Texture>
+				</Layer>
+				<Layer>	
+					<FontString name="$parentText" inherits="GameFontNormalSmall" text="Faerie Fire">
+						<Anchors>
+							<Anchor point="LEFT" relativepoint="RIGHT"/>
+						</Anchors>
+					</FontString>
+				</Layer>
+			</Layers>
+			<Scripts>
+				<OnShow>
+					BadKittyColorOptionsCatFFFTexture:SetTexture(BadKittyCatFFFColors[1],BadKittyCatFFFColors[2],BadKittyCatFFFColors[3])
+				</OnShow>
+				<OnClick>
+					BadKittyColorTempFrame = this:GetName()
+					ColorPickerFrame.cancelFunc = nil 
+					ColorPickerFrame.func = nil 
+					ColorPickerFrame.cancelFunc = BadKitty_CancelColor
+					ColorPickerFrame:SetColorRGB(unpack(BadKittyCatFFFColors))
+					ColorPickerFrame.func = BadKitty_SetColor
+					ColorPickerFrame.previousValues = BadKittyCatFFFColors 
+					ColorPickerFrame:Show()
+				</OnClick> 
+			</Scripts>
+		</Button>
+		<Button name="$parentCatTF">
+			<Size>
+				<AbsDimension x="15" y="15"/>
+			</Size>
+			<Anchors>
+				<Anchor point="TOPLEFT">
+					<Offset>
+						<AbsDimension x="20" y="-180"/>
+					</Offset>
+				</Anchor>
+			</Anchors>
+			<Layers>
+				<Layer>
+					<Texture name = "$parentTexture">
+						<Size>
+							<AbsDimension x="15" y="15"/>
+						</Size>
+					</Texture>
+				</Layer>
+				<Layer>	
+					<FontString name="$parentText" inherits="GameFontNormalSmall" text="Tiger's Fury">
+						<Anchors>
+							<Anchor point="LEFT" relativepoint="RIGHT"/>
+						</Anchors>
+					</FontString>
+				</Layer>
+			</Layers>
+			<Scripts>
+				<OnShow>
+					BadKittyColorOptionsCatTFTexture:SetTexture(BadKittyCatTFColors[1],BadKittyCatTFColors[2],BadKittyCatTFColors[3])
+				</OnShow>
+				<OnClick>
+					BadKittyColorTempFrame = this:GetName()
+					ColorPickerFrame.cancelFunc = nil 
+					ColorPickerFrame.func = nil 
+					ColorPickerFrame.cancelFunc = BadKitty_CancelColor
+					ColorPickerFrame:SetColorRGB(unpack(BadKittyCatTFColors))
+					ColorPickerFrame.func = BadKitty_SetColor
+					ColorPickerFrame.previousValues = BadKittyCatTFColors 
+					ColorPickerFrame:Show()
+				</OnClick> 
+			</Scripts>
+		</Button>
+		<Button name="$parentCatZerk">
+			<Size>
+				<AbsDimension x="15" y="15"/>
+			</Size>
+			<Anchors>
+				<Anchor point="TOPLEFT">
+					<Offset>
+						<AbsDimension x="20" y="-205"/>
+					</Offset>
+				</Anchor>
+			</Anchors>
+			<Layers>
+				<Layer>
+					<Texture name = "$parentTexture">
+						<Size>
+							<AbsDimension x="15" y="15"/>
+						</Size>
+					</Texture>
+				</Layer>
+				<Layer>	
+					<FontString name="$parentText" inherits="GameFontNormalSmall" text="Berserk">
+						<Anchors>
+							<Anchor point="LEFT" relativepoint="RIGHT"/>
+						</Anchors>
+					</FontString>
+				</Layer>
+			</Layers>
+			<Scripts>
+				<OnShow>
+					BadKittyColorOptionsCatZerkTexture:SetTexture(BadKittyCatZerkColors[1],BadKittyCatZerkColors[2],BadKittyCatZerkColors[3])
+				</OnShow>
+				<OnClick>
+					BadKittyColorTempFrame = this:GetName()
+					ColorPickerFrame.cancelFunc = nil 
+					ColorPickerFrame.func = nil 
+					ColorPickerFrame.cancelFunc = BadKitty_CancelColor
+					ColorPickerFrame:SetColorRGB(unpack(BadKittyCatZerkColors))
+					ColorPickerFrame.func = BadKitty_SetColor
+					ColorPickerFrame.previousValues = BadKittyCatZerkColors 
+					ColorPickerFrame:Show()
+				</OnClick> 
+			</Scripts>
+		</Button>
+		<Button name="$parentCatEnergy">
+			<Size>
+				<AbsDimension x="15" y="15"/>
+			</Size>
+			<Anchors>
+				<Anchor point="TOPLEFT">
+					<Offset>
+						<AbsDimension x="20" y="-230"/>
+					</Offset>
+				</Anchor>
+			</Anchors>
+	 		<Layers>
+				<Layer>
+					<Texture name = "$parentTexture">
+						<Size>
+							<AbsDimension x="15" y="15"/>
+						</Size>
+					</Texture>
+				</Layer>
+				<Layer>	
+					<FontString name="$parentText" inherits="GameFontNormalSmall" text="Energy">
+						<Anchors>
+							<Anchor point="LEFT" relativepoint="RIGHT"/>
+						</Anchors>
+					</FontString>
+				</Layer>
+			</Layers>
+			<Scripts>
+				<OnShow>
+					BadKittyColorOptionsCatEnergyTexture:SetTexture(BadKittyCatEnergyColors[1],BadKittyCatEnergyColors[2],BadKittyCatEnergyColors[3])
+				</OnShow>
+				<OnClick>
+					BadKittyColorTempFrame = this:GetName()
+					ColorPickerFrame.cancelFunc = nil 
+					ColorPickerFrame.func = nil 
+					ColorPickerFrame.cancelFunc = BadKitty_CancelColor
+					ColorPickerFrame:SetColorRGB(unpack(BadKittyCatEnergyColors))
+					ColorPickerFrame.func = BadKitty_SetColor
+					ColorPickerFrame.previousValues = BadKittyCatEnergyColors 
+					ColorPickerFrame:Show()
+				</OnClick> 
+			</Scripts>
+		</Button>
+		<Button name="$parentCatPS">
+			<Size>
+				<AbsDimension x="15" y="15"/>
+			</Size>
+			<Anchors>
+				<Anchor point="TOPLEFT">
+					<Offset>
+						<AbsDimension x="20" y="-255"/>
+					</Offset>
+				</Anchor>
+			</Anchors>
+	 		<Layers>
+				<Layer>
+					<Texture name = "$parentTexture">
+						<Size>
+							<AbsDimension x="15" y="15"/>
+						</Size>
+					</Texture>
+				</Layer>
+				<Layer>	
+					<FontString name="$parentText" inherits="GameFontNormalSmall" text="Instant Nature">
+						<Anchors>
+							<Anchor point="LEFT" relativepoint="RIGHT"/>
+						</Anchors>
+					</FontString>
+				</Layer>
+			</Layers>
+			<Scripts>
+				<OnShow>
+					BadKittyColorOptionsCatPSTexture:SetTexture(BadKittyCatPSColors[1],BadKittyCatPSColors[2],BadKittyCatPSColors[3])
+				</OnShow>
+				<OnClick>
+					BadKittyColorTempFrame = this:GetName()
+					ColorPickerFrame.cancelFunc = nil 
+					ColorPickerFrame.func = nil 
+					ColorPickerFrame.cancelFunc = BadKitty_CancelColor
+					ColorPickerFrame:SetColorRGB(unpack(BadKittyCatPSColors))
+					ColorPickerFrame.func = BadKitty_SetColor
+					ColorPickerFrame.previousValues = BadKittyCatPSColors 
+					ColorPickerFrame:Show()
+				</OnClick> 
+			</Scripts>
+		</Button>
+		<Button name="$parentCatTrink1">
+			<Size>
+				<AbsDimension x="15" y="15"/>
+			</Size>
+			<Anchors>
+				<Anchor point="TOPLEFT">
+					<Offset>
+						<AbsDimension x="20" y="-280"/>
+					</Offset>
+				</Anchor>
+			</Anchors>
+	 		<Layers>
+				<Layer>
+					<Texture name = "$parentTexture">
+						<Size>
+							<AbsDimension x="15" y="15"/>
+						</Size>
+					</Texture>
+				</Layer>
+				<Layer>	
+					<FontString name="$parentText" inherits="GameFontNormalSmall" text="Trinket 1">
+						<Anchors>
+							<Anchor point="LEFT" relativepoint="RIGHT"/>
+						</Anchors>
+					</FontString>
+				</Layer>
+			</Layers>
+			<Scripts>
+				<OnShow>
+					BadKittyColorOptionsCatTrink1Texture:SetTexture(BadKittyCatTrink1Colors[1],BadKittyCatTrink1Colors[2],BadKittyCatTrink1Colors[3])
+				</OnShow>
+				<OnClick>
+					BadKittyColorTempFrame = this:GetName()
+					ColorPickerFrame.cancelFunc = nil 
+					ColorPickerFrame.func = nil 
+					ColorPickerFrame.cancelFunc = BadKitty_CancelColor
+					ColorPickerFrame:SetColorRGB(unpack(BadKittyCatTrink1Colors))
+					ColorPickerFrame.func = BadKitty_SetColor
+					ColorPickerFrame.previousValues = BadKittyCatTrink1Colors 
+					ColorPickerFrame:Show()
+				</OnClick> 
+			</Scripts>
+		</Button>
+		<Button name="$parentCatTrink2">
+			<Size>
+				<AbsDimension x="15" y="15"/>
+			</Size>
+			<Anchors>
+				<Anchor point="TOPLEFT">
+					<Offset>
+						<AbsDimension x="20" y="-305"/>
+					</Offset>
+				</Anchor>
+			</Anchors>
+	 		<Layers>
+				<Layer>
+					<Texture name = "$parentTexture">
+						<Size>
+							<AbsDimension x="15" y="15"/>
+						</Size>
+					</Texture>
+				</Layer>
+				<Layer>	
+					<FontString name="$parentText" inherits="GameFontNormalSmall" text="Trinket 2">
+						<Anchors>
+							<Anchor point="LEFT" relativepoint="RIGHT"/>
+						</Anchors>
+					</FontString>
+				</Layer>
+			</Layers>
+			<Scripts>
+				<OnShow>
+					BadKittyColorOptionsCatTrink2Texture:SetTexture(BadKittyCatTrink2Colors[1],BadKittyCatTrink2Colors[2],BadKittyCatTrink2Colors[3])
+				</OnShow>
+				<OnClick>
+					BadKittyColorTempFrame = this:GetName()
+					ColorPickerFrame.cancelFunc = nil 
+					ColorPickerFrame.func = nil 
+					ColorPickerFrame.cancelFunc = BadKitty_CancelColor
+					ColorPickerFrame:SetColorRGB(unpack(BadKittyCatTrink2Colors))
+					ColorPickerFrame.func = BadKitty_SetColor
+					ColorPickerFrame.previousValues = BadKittyCatTrink2Colors 
+					ColorPickerFrame:Show()
+				</OnClick> 
+			</Scripts>
+		</Button>
+		<Button name="$parentCatIdol">
+			<Size>
+				<AbsDimension x="15" y="15"/>
+			</Size>
+			<Anchors>
+				<Anchor point="TOPLEFT">
+					<Offset>
+						<AbsDimension x="20" y="-330"/>
+					</Offset>
+				</Anchor>
+			</Anchors>
+	 		<Layers>
+				<Layer>
+					<Texture name = "$parentTexture">
+						<Size>
+							<AbsDimension x="15" y="15"/>
+						</Size>
+					</Texture>
+				</Layer>
+				<Layer>	
+					<FontString name="$parentText" inherits="GameFontNormalSmall" text="Idol">
+						<Anchors>
+							<Anchor point="LEFT" relativepoint="RIGHT"/>
+						</Anchors>
+					</FontString>
+				</Layer>
+			</Layers>
+			<Scripts>
+				<OnShow>
+					BadKittyColorOptionsCatIdolTexture:SetTexture(BadKittyCatIdolColors[1],BadKittyCatIdolColors[2],BadKittyCatIdolColors[3])
+				</OnShow>
+				<OnClick>
+					BadKittyColorTempFrame = this:GetName()
+					ColorPickerFrame.cancelFunc = nil 
+					ColorPickerFrame.func = nil 
+					ColorPickerFrame.cancelFunc = BadKitty_CancelColor
+					ColorPickerFrame:SetColorRGB(unpack(BadKittyCatIdolColors))
+					ColorPickerFrame.func = BadKitty_SetColor
+					ColorPickerFrame.previousValues = BadKittyCatIdolColors 
+					ColorPickerFrame:Show()
+				</OnClick> 
+			</Scripts>
+		</Button>
+		<Button name="$parentCatEnchant">
+			<Size>
+				<AbsDimension x="15" y="15"/>
+			</Size>
+			<Anchors>
+				<Anchor point="TOPLEFT">
+					<Offset>
+						<AbsDimension x="20" y="-355"/>
+					</Offset>
+				</Anchor>
+			</Anchors>
+	 		<Layers>
+				<Layer>
+					<Texture name = "$parentTexture">
+						<Size>
+							<AbsDimension x="15" y="15"/>
+						</Size>
+					</Texture>
+				</Layer>
+				<Layer>	
+					<FontString name="$parentText" inherits="GameFontNormalSmall" text="Enchant">
+						<Anchors>
+							<Anchor point="LEFT" relativepoint="RIGHT"/>
+						</Anchors>
+					</FontString>
+				</Layer>
+			</Layers>
+			<Scripts>
+				<OnShow>
+					BadKittyColorOptionsCatEnchantTexture:SetTexture(BadKittyCatEnchantColors[1],BadKittyCatEnchantColors[2],BadKittyCatEnchantColors[3])
+				</OnShow>
+				<OnClick>
+					BadKittyColorTempFrame = this:GetName()
+					ColorPickerFrame.cancelFunc = nil 
+					ColorPickerFrame.func = nil 
+					ColorPickerFrame.cancelFunc = BadKitty_CancelColor
+					ColorPickerFrame:SetColorRGB(unpack(BadKittyCatEnchantColors))
+					ColorPickerFrame.func = BadKitty_SetColor
+					ColorPickerFrame.previousValues = BadKittyCatEnchantColors 
+					ColorPickerFrame:Show()
+				</OnClick> 
+			</Scripts>
+		</Button>
+		<Button name="$parentBearMangle">
+			<Size>
+				<AbsDimension x="15" y="15"/>
+			</Size>
+			<Anchors>
+				<Anchor point="TOPLEFT">
+					<Offset>
+						<AbsDimension x="200" y="-55"/>
+					</Offset>
+				</Anchor>
+			</Anchors>
+			<Layers>
+				<Layer>
+					<Texture name = "$parentTexture">
+						<Size>
+							<AbsDimension x="15" y="15"/>
+						</Size>
+					</Texture>
+				</Layer>
+				<Layer>	
+					<FontString name="$parentText" inherits="GameFontNormalSmall" text="Mangle">
+						<Anchors>
+							<Anchor point="LEFT" relativepoint="RIGHT"/>
+						</Anchors>
+					</FontString>
+				</Layer>
+			</Layers>
+			<Scripts>
+				<OnShow>
+					BadKittyColorOptionsBearMangleTexture:SetTexture(BadKittyBearMangleColors[1],BadKittyBearMangleColors[2],BadKittyBearMangleColors[3])
+				</OnShow>
+				<OnClick>
+					BadKittyColorTempFrame = this:GetName()
+					ColorPickerFrame.cancelFunc = nil 
+					ColorPickerFrame.func = nil 
+					ColorPickerFrame.cancelFunc = BadKitty_CancelColor
+					ColorPickerFrame:SetColorRGB(unpack(BadKittyBearMangleColors))
+					ColorPickerFrame.func = BadKitty_SetColor
+					ColorPickerFrame.previousValues = BadKittyBearMangleColors 
+					ColorPickerFrame:Show()
+				</OnClick> 
+			</Scripts>
+		</Button>
+		<Button name="$parentBearDemo">
+			<Size>
+				<AbsDimension x="15" y="15"/>
+			</Size>
+			<Anchors>
+				<Anchor point="TOPLEFT">
+					<Offset>
+						<AbsDimension x="200" y="-80"/>
+					</Offset>
+				</Anchor>
+			</Anchors>
+			<Layers>
+				<Layer>
+					<Texture name = "$parentTexture">
+						<Size>
+							<AbsDimension x="15" y="15"/>
+						</Size>
+					</Texture>
+				</Layer>
+				<Layer>	
+					<FontString name="$parentText" inherits="GameFontNormalSmall" text="Demo Roar">
+						<Anchors>
+							<Anchor point="LEFT" relativepoint="RIGHT"/>
+						</Anchors>
+					</FontString>
+				</Layer>
+			</Layers>
+			<Scripts>
+				<OnShow>
+					BadKittyColorOptionsBearDemoTexture:SetTexture(BadKittyBearDemoColors[1],BadKittyBearDemoColors[2],BadKittyBearDemoColors[3])
+				</OnShow>
+				<OnClick>
+					BadKittyColorTempFrame = this:GetName()
+					ColorPickerFrame.cancelFunc = nil 
+					ColorPickerFrame.func = nil 
+					ColorPickerFrame.cancelFunc = BadKitty_CancelColor
+					ColorPickerFrame:SetColorRGB(unpack(BadKittyBearDemoColors))
+					ColorPickerFrame.func = BadKitty_SetColor
+					ColorPickerFrame.previousValues = BadKittyBearDemoColors 
+					ColorPickerFrame:Show()
+				</OnClick> 
+			</Scripts>
+		</Button>
+		<Button name="$parentBearLac">
+			<Size>
+				<AbsDimension x="15" y="15"/>
+			</Size>
+			<Anchors>
+				<Anchor point="TOPLEFT">
+					<Offset>
+						<AbsDimension x="200" y="-105"/>
+					</Offset>
+				</Anchor>
+			</Anchors>
+			<Layers>
+				<Layer>
+					<Texture name = "$parentTexture">
+						<Size>
+							<AbsDimension x="15" y="15"/>
+						</Size>
+					</Texture>
+				</Layer>
+				<Layer>	
+					<FontString name="$parentText" inherits="GameFontNormalSmall" text="Lacerate">
+						<Anchors>
+							<Anchor point="LEFT" relativepoint="RIGHT"/>
+						</Anchors>
+					</FontString>
+				</Layer>
+			</Layers>
+			<Scripts>
+				<OnShow>
+					BadKittyColorOptionsBearLacTexture:SetTexture(BadKittyBearLacColors[1],BadKittyBearLacColors[2],BadKittyBearLacColors[3])
+				</OnShow>
+				<OnClick>
+					BadKittyColorTempFrame = this:GetName()
+					ColorPickerFrame.cancelFunc = nil 
+					ColorPickerFrame.func = nil 
+					ColorPickerFrame.cancelFunc = BadKitty_CancelColor
+					ColorPickerFrame:SetColorRGB(unpack(BadKittyBearLacColors))
+					ColorPickerFrame.func = BadKitty_SetColor
+					ColorPickerFrame.previousValues = BadKittyBearLacColors 
+					ColorPickerFrame:Show()
+				</OnClick> 
+			</Scripts>
+		</Button>
+		<Button name="$parentBearFFF">
+			<Size>
+				<AbsDimension x="15" y="15"/>
+			</Size>
+			<Anchors>
+				<Anchor point="TOPLEFT">
+					<Offset>
+						<AbsDimension x="200" y="-130"/>
+					</Offset>
+				</Anchor>
+			</Anchors>
+			<Layers>
+				<Layer>
+					<Texture name = "$parentTexture">
+						<Size>
+							<AbsDimension x="15" y="15"/>
+						</Size>
+					</Texture>
+				</Layer>
+				<Layer>	
+					<FontString name="$parentText" inherits="GameFontNormalSmall" text="Faerie Fire">
+						<Anchors>
+							<Anchor point="LEFT" relativepoint="RIGHT"/>
+						</Anchors>
+					</FontString>
+				</Layer>
+			</Layers>
+			<Scripts>
+				<OnShow>
+					BadKittyColorOptionsBearFFFTexture:SetTexture(BadKittyBearFFFColors[1],BadKittyBearFFFColors[2],BadKittyBearFFFColors[3])
+				</OnShow>
+				<OnClick>
+					BadKittyColorTempFrame = this:GetName()
+					ColorPickerFrame.cancelFunc = nil 
+					ColorPickerFrame.func = nil 
+					ColorPickerFrame.cancelFunc = BadKitty_CancelColor
+					ColorPickerFrame:SetColorRGB(unpack(BadKittyBearFFFColors))
+					ColorPickerFrame.func = BadKitty_SetColor
+					ColorPickerFrame.previousValues = BadKittyBearFFFColors 
+					ColorPickerFrame:Show()
+				</OnClick> 
+			</Scripts>
+		</Button>
+		<Button name="$parentBearBS">
+			<Size>
+				<AbsDimension x="15" y="15"/>
+			</Size>
+			<Anchors>
+				<Anchor point="TOPLEFT">
+					<Offset>
+						<AbsDimension x="200" y="-155"/>
+					</Offset>
+				</Anchor>
+			</Anchors>
+			<Layers>
+				<Layer>
+					<Texture name = "$parentTexture">
+						<Size>
+							<AbsDimension x="15" y="15"/>
+						</Size>
+					</Texture>
+				</Layer>
+				<Layer>	
+					<FontString name="$parentText" inherits="GameFontNormalSmall" text="Barkskin">
+						<Anchors>
+							<Anchor point="LEFT" relativepoint="RIGHT"/>
+						</Anchors>
+					</FontString>
+				</Layer>
+			</Layers>
+			<Scripts>
+				<OnShow>
+					BadKittyColorOptionsBearBSTexture:SetTexture(BadKittyBearBSColors[1],BadKittyBearBSColors[2],BadKittyBearBSColors[3])
+				</OnShow>
+				<OnClick>
+					BadKittyColorTempFrame = this:GetName()
+					ColorPickerFrame.cancelFunc = nil 
+					ColorPickerFrame.func = nil 
+					ColorPickerFrame.cancelFunc = BadKitty_CancelColor
+					ColorPickerFrame:SetColorRGB(unpack(BadKittyBearBSColors))
+					ColorPickerFrame.func = BadKitty_SetColor
+					ColorPickerFrame.previousValues = BadKittyBearBSColors 
+					ColorPickerFrame:Show()
+				</OnClick> 
+			</Scripts>
+		</Button>
+		<Button name="$parentBearZerk">
+			<Size>
+				<AbsDimension x="15" y="15"/>
+			</Size>
+			<Anchors>
+				<Anchor point="TOPLEFT">
+					<Offset>
+						<AbsDimension x="200" y="-180"/>
+					</Offset>
+				</Anchor>
+			</Anchors>
+			<Layers>
+				<Layer>
+					<Texture name = "$parentTexture">
+						<Size>
+							<AbsDimension x="15" y="15"/>
+						</Size>
+					</Texture>
+				</Layer>
+				<Layer>	
+					<FontString name="$parentText" inherits="GameFontNormalSmall" text="Berserk">
+						<Anchors>
+							<Anchor point="LEFT" relativepoint="RIGHT"/>
+						</Anchors>
+					</FontString>
+				</Layer>
+			</Layers>
+			<Scripts>
+				<OnShow>
+					BadKittyColorOptionsBearZerkTexture:SetTexture(BadKittyBearZerkColors[1],BadKittyBearZerkColors[2],BadKittyBearZerkColors[3])
+				</OnShow>
+				<OnClick>
+					BadKittyColorTempFrame = this:GetName()
+					ColorPickerFrame.cancelFunc = nil 
+					ColorPickerFrame.func = nil 
+					ColorPickerFrame.cancelFunc = BadKitty_CancelColor
+					ColorPickerFrame:SetColorRGB(unpack(BadKittyBearZerkColors))
+					ColorPickerFrame.func = BadKitty_SetColor
+					ColorPickerFrame.previousValues = BadKittyBearZerkColors 
+					ColorPickerFrame:Show()
+				</OnClick> 
+			</Scripts>
+		</Button>
+		<Button name="$parentBearRage">
+			<Size>
+				<AbsDimension x="15" y="15"/>
+			</Size>
+			<Anchors>
+				<Anchor point="TOPLEFT">
+					<Offset>
+						<AbsDimension x="200" y="-205"/>
+					</Offset>
+				</Anchor>
+			</Anchors>
+			<Layers>
+				<Layer>
+					<Texture name = "$parentTexture">
+						<Size>
+							<AbsDimension x="15" y="15"/>
+						</Size>
+					</Texture>
+				</Layer>
+				<Layer>	
+					<FontString name="$parentText" inherits="GameFontNormalSmall" text="Rage">
+						<Anchors>
+							<Anchor point="LEFT" relativepoint="RIGHT"/>
+						</Anchors>
+					</FontString>
+				</Layer>
+			</Layers>
+			<Scripts>
+				<OnShow>
+					BadKittyColorOptionsBearRageTexture:SetTexture(BadKittyBearRageColors[1],BadKittyBearRageColors[2],BadKittyBearRageColors[3])
+				</OnShow>
+				<OnClick>
+					BadKittyColorTempFrame = this:GetName()
+					ColorPickerFrame.cancelFunc = nil 
+					ColorPickerFrame.func = nil 
+					ColorPickerFrame.cancelFunc = BadKitty_CancelColor
+					ColorPickerFrame:SetColorRGB(unpack(BadKittyBearRageColors))
+					ColorPickerFrame.func = BadKitty_SetColor
+					ColorPickerFrame.previousValues = BadKittyBearRageColors 
+					ColorPickerFrame:Show()
+				</OnClick> 
+			</Scripts>
+		</Button>
+		<StatusBar name="$parentExampleBar">
+			<Size x="150" y="15"/>
+			<Layers>
+				<Layer level="ARTWORK">
+					<FontString name="$parentText" justifyH="LEFT" inherits="GameFontNormal" />
+					<FontString name="$parentSecs" justifyH="RIGHT" inherits="GameFontNormal" />
+				</Layer>
+			</Layers>
+			<Anchors>
+				<Anchor point="TOP" relativepoint="TOP">
+					<Offset>
+						<AbsDimension x="100" y="-393" />
+					</Offset>
+				</Anchor>
+			</Anchors>
+			<BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
+			<Scripts>
+				<OnLoad>
+					this:SetMinMaxValues(0,40)
+					this:SetValue(40)
+				</OnLoad>
+				<OnShow>
+					BadKitty_Colorize()
+				</OnShow>
+			</Scripts>
+		</StatusBar>
+		</Frames>
+	</Frame>
+	<Frame name="BadKittyBarOptions" parent="UIParent">
+		<Scripts>
+			<OnLoad>
+				BadKitty_OptionsLoad(self,"Bar Layout")
+				BadKittyBarOptionsDescription:SetText("Use the arrows to move each bar up and down in order.\nThis will be the order they appear in their frames.  Use the radio\n buttons on the right to limit the number of bars shown.  \nNo bars below the radio button will be visible.")
+			</OnLoad>
+			<OnShow>
+				BadKitty_BarOptionsText()
+				BadKitty_CatRadioOff()
+				BadKitty_BearRadioOff()
+				getglobal("BadKittyBarOptionsBearRadio"..BadKittyBearCount):SetChecked(1)
+				getglobal("BadKittyBarOptionsCatRadio"..BadKittyCatCount):SetChecked(1)
+			</OnShow>
+		</Scripts>
+			<Layers>
+				<Layer level="BACKGROUND">
+					<Texture name="$parent_Background" setAllPoints="true">
+						<Color r=".1" g=".1" b=".1" a="0.5" /> 
+					</Texture>
+				</Layer>
+				<Layer>
+					<FontString name="$parentDescription" inherits="NumberFontNormal">
+						<Anchors>
+							<Anchor point="TOPLEFT">
+								<Offset><AbsDimension x="10" y="-10"/></Offset>
+							</Anchor>
+						</Anchors>
+					</FontString>
+					<FontString name="$parentCatTitle" inherits="GameFontNormalLarge" text="Cat Bars">
+						<Anchors>
+							<Anchor point="TOPLEFT">
+								<Offset><AbsDimension x="20" y="-70"/></Offset>
+							</Anchor>
+						</Anchors>
+					</FontString>
+					<FontString name="$parentCatText1" inherits="GameFontNormalSmall">
+						<Anchors>
+							<Anchor point="TOPLEFT">
+								<Offset><AbsDimension x="20" y="-90"/></Offset>
+							</Anchor>
+						</Anchors>
+					</FontString>
+					<FontString name="$parentCatText2" inherits="GameFontNormalSmall">
+						<Anchors>
+							<Anchor point="TOPLEFT">
+								<Offset><AbsDimension x="20" y="-110"/></Offset>
+							</Anchor>
+						</Anchors>
+					</FontString>
+					<FontString name="$parentCatText3" inherits="GameFontNormalSmall">
+						<Anchors>
+							<Anchor point="TOPLEFT">
+								<Offset><AbsDimension x="20" y="-130"/></Offset>
+							</Anchor>
+						</Anchors>
+					</FontString>
+					<FontString name="$parentCatText4" inherits="GameFontNormalSmall">
+						<Anchors>
+							<Anchor point="TOPLEFT">
+								<Offset><AbsDimension x="20" y="-150"/></Offset>
+							</Anchor>
+						</Anchors>
+					</FontString>
+					<FontString name="$parentCatText5" inherits="GameFontNormalSmall">
+						<Anchors>
+							<Anchor point="TOPLEFT">
+								<Offset><AbsDimension x="20" y="-170"/></Offset>
+							</Anchor>
+						</Anchors>
+					</FontString>
+					<FontString name="$parentCatText6" inherits="GameFontNormalSmall">
+						<Anchors>
+							<Anchor point="TOPLEFT">
+								<Offset><AbsDimension x="20" y="-190"/></Offset>
+							</Anchor>
+						</Anchors>
+					</FontString>
+					<FontString name="$parentCatText7" inherits="GameFontNormalSmall">
+						<Anchors>
+							<Anchor point="TOPLEFT">
+								<Offset><AbsDimension x="20" y="-210"/></Offset>
+							</Anchor>
+						</Anchors>
+					</FontString>
+					<FontString name="$parentCatText8" inherits="GameFontNormalSmall">
+						<Anchors>
+							<Anchor point="TOPLEFT">
+								<Offset><AbsDimension x="20" y="-230"/></Offset>
+							</Anchor>
+						</Anchors>
+					</FontString>
+					<FontString name="$parentCatText9" inherits="GameFontNormalSmall">
+						<Anchors>
+							<Anchor point="TOPLEFT">
+								<Offset><AbsDimension x="20" y="-250"/></Offset>
+							</Anchor>
+						</Anchors>
+					</FontString>
+					<FontString name="$parentCatText10" inherits="GameFontNormalSmall">
+						<Anchors>
+							<Anchor point="TOPLEFT">
+								<Offset><AbsDimension x="20" y="-270"/></Offset>
+							</Anchor>
+						</Anchors>
+					</FontString>
+					<FontString name="$parentCatText11" inherits="GameFontNormalSmall">
+						<Anchors>
+							<Anchor point="TOPLEFT">
+								<Offset><AbsDimension x="20" y="-290"/></Offset>
+							</Anchor>
+						</Anchors>
+					</FontString>
+					<FontString name="$parentCatText12" inherits="GameFontNormalSmall">
+						<Anchors>
+							<Anchor point="TOPLEFT">
+								<Offset><AbsDimension x="20" y="-310"/></Offset>
+							</Anchor>
+						</Anchors>
+					</FontString>
+					<FontString name="$parentCatText13" inherits="GameFontNormalSmall">
+						<Anchors>
+							<Anchor point="TOPLEFT">
+								<Offset><AbsDimension x="20" y="-330"/></Offset>
+							</Anchor>
+						</Anchors>
+					</FontString>
+					<FontString name="$parentCatText14" inherits="GameFontNormalSmall">
+						<Anchors>
+							<Anchor point="TOPLEFT">
+								<Offset><AbsDimension x="20" y="-350"/></Offset>
+							</Anchor>
+						</Anchors>
+					</FontString>
+					<FontString name="$parentCatText15" inherits="GameFontNormalSmall">
+						<Anchors>
+							<Anchor point="TOPLEFT">
+								<Offset><AbsDimension x="20" y="-370"/></Offset>
+							</Anchor>
+						</Anchors>
+					</FontString>
+					<FontString name="$parentCatText0" inherits="GameFontNormalSmall">
+						<Anchors>
+							<Anchor point="TOPLEFT">
+								<Offset><AbsDimension x="20" y="-390"/></Offset>
+							</Anchor>
+						</Anchors>
+					</FontString>
+					<FontString name="$parentBearTitle" inherits="GameFontNormalLarge" text="Bear Bars">
+						<Anchors>
+							<Anchor point="TOPLEFT">
+								<Offset><AbsDimension x="250" y="-70"/></Offset>
+							</Anchor>
+						</Anchors>
+					</FontString>
+					<FontString name="$parentBearText1" inherits="GameFontNormalSmall">
+						<Anchors>
+							<Anchor point="TOPLEFT">
+								<Offset><AbsDimension x="250" y="-90"/></Offset>
+							</Anchor>
+						</Anchors>
+					</FontString>
+					<FontString name="$parentBearText2" inherits="GameFontNormalSmall">
+						<Anchors>
+							<Anchor point="TOPLEFT">
+								<Offset><AbsDimension x="250" y="-110"/></Offset>
+							</Anchor>
+						</Anchors>
+					</FontString>
+					<FontString name="$parentBearText3" inherits="GameFontNormalSmall">
+						<Anchors>
+							<Anchor point="TOPLEFT">
+								<Offset><AbsDimension x="250" y="-130"/></Offset>
+							</Anchor>
+						</Anchors>
+					</FontString>
+					<FontString name="$parentBearText4" inherits="GameFontNormalSmall">
+						<Anchors>
+							<Anchor point="TOPLEFT">
+								<Offset><AbsDimension x="250" y="-150"/></Offset>
+							</Anchor>
+						</Anchors>
+					</FontString>
+					<FontString name="$parentBearText5" inherits="GameFontNormalSmall">
+						<Anchors>
+							<Anchor point="TOPLEFT">
+								<Offset><AbsDimension x="250" y="-170"/></Offset>
+							</Anchor>
+						</Anchors>
+					</FontString>
+					<FontString name="$parentBearText6" inherits="GameFontNormalSmall">
+						<Anchors>
+							<Anchor point="TOPLEFT">
+								<Offset><AbsDimension x="250" y="-190"/></Offset>
+							</Anchor>
+						</Anchors>
+					</FontString>
+					<FontString name="$parentBearText7" inherits="GameFontNormalSmall">
+						<Anchors>
+							<Anchor point="TOPLEFT">
+								<Offset><AbsDimension x="250" y="-210"/></Offset>
+							</Anchor>
+						</Anchors>
+					</FontString>
+					<FontString name="$parentBearText8" inherits="GameFontNormalSmall">
+						<Anchors>
+							<Anchor point="TOPLEFT">
+								<Offset><AbsDimension x="250" y="-230"/></Offset>
+							</Anchor>
+						</Anchors>
+					</FontString>
+					<FontString name="$parentBearText9" inherits="GameFontNormalSmall">
+						<Anchors>
+							<Anchor point="TOPLEFT">
+								<Offset><AbsDimension x="250" y="-250"/></Offset>
+							</Anchor>
+						</Anchors>
+					</FontString>
+					<FontString name="$parentBearText0" inherits="GameFontNormalSmall">
+						<Anchors>
+							<Anchor point="TOPLEFT">
+								<Offset><AbsDimension x="250" y="-270"/></Offset>
+							</Anchor>
+						</Anchors>
+					</FontString>
+				</Layer>
+			</Layers>
+		<Frames>
+			<Button name="$parentCatUp2" inherits="UIPanelScrollUpButtonTemplate">
+				<Size>
+					<AbsDimension x="15" y="15"/>
+				</Size>
+				<Anchors>
+					<Anchor point="TOPLEFT">
+						<Offset><AbsDimension x="100" y="-110"/></Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						BadKitty_BarOrder(2,"UP",BadKittyCFrames)
+					</OnClick>
+				</Scripts>
+			</Button>
+			<Button name="$parentCatUp3" inherits="UIPanelScrollUpButtonTemplate">
+				<Size>
+					<AbsDimension x="15" y="15"/>
+				</Size>
+				<Anchors>
+					<Anchor point="TOPLEFT">
+						<Offset><AbsDimension x="100" y="-130"/></Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						BadKitty_BarOrder(3,"UP",BadKittyCFrames)
+					</OnClick>
+				</Scripts>
+			</Button>
+			<Button name="$parentCatUp4" inherits="UIPanelScrollUpButtonTemplate">
+				<Size>
+					<AbsDimension x="15" y="15"/>
+				</Size>
+				<Anchors>
+					<Anchor point="TOPLEFT">
+						<Offset><AbsDimension x="100" y="-150"/></Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						BadKitty_BarOrder(4,"UP",BadKittyCFrames)
+					</OnClick>
+				</Scripts>
+			</Button>
+			<Button name="$parentCatUp5" inherits="UIPanelScrollUpButtonTemplate">
+				<Size>
+					<AbsDimension x="15" y="15"/>
+				</Size>
+				<Anchors>
+					<Anchor point="TOPLEFT">
+						<Offset><AbsDimension x="100" y="-170"/></Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						BadKitty_BarOrder(5,"UP",BadKittyCFrames)
+					</OnClick>
+				</Scripts>
+			</Button>
+			<Button name="$parentCatUp6" inherits="UIPanelScrollUpButtonTemplate">
+				<Size>
+					<AbsDimension x="15" y="15"/>
+				</Size>
+				<Anchors>
+					<Anchor point="TOPLEFT">
+						<Offset><AbsDimension x="100" y="-190"/></Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						BadKitty_BarOrder(6,"UP",BadKittyCFrames)
+					</OnClick>
+				</Scripts>
+			</Button>
+			<Button name="$parentCatUp7" inherits="UIPanelScrollUpButtonTemplate">
+				<Size>
+					<AbsDimension x="15" y="15"/>
+				</Size>
+				<Anchors>
+					<Anchor point="TOPLEFT">
+						<Offset><AbsDimension x="100" y="-210"/></Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						BadKitty_BarOrder(7,"UP",BadKittyCFrames)
+					</OnClick>
+				</Scripts>
+			</Button>
+			<Button name="$parentCatUp8" inherits="UIPanelScrollUpButtonTemplate">
+				<Size>
+					<AbsDimension x="15" y="15"/>
+				</Size>
+				<Anchors>
+					<Anchor point="TOPLEFT">
+						<Offset><AbsDimension x="100" y="-230"/></Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						BadKitty_BarOrder(8,"UP",BadKittyCFrames)
+					</OnClick>
+				</Scripts>
+			</Button>
+			<Button name="$parentCatUp9" inherits="UIPanelScrollUpButtonTemplate">
+				<Size>
+					<AbsDimension x="15" y="15"/>
+				</Size>
+				<Anchors>
+					<Anchor point="TOPLEFT">
+						<Offset><AbsDimension x="100" y="-250"/></Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						BadKitty_BarOrder(9,"UP",BadKittyCFrames)
+					</OnClick>
+				</Scripts>
+			</Button>
+			<Button name="$parentCatUp10" inherits="UIPanelScrollUpButtonTemplate">
+				<Size>
+					<AbsDimension x="15" y="15"/>
+				</Size>
+				<Anchors>
+					<Anchor point="TOPLEFT">
+						<Offset><AbsDimension x="100" y="-270"/></Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						BadKitty_BarOrder(10,"UP",BadKittyCFrames)
+					</OnClick>
+				</Scripts>
+			</Button>
+			<Button name="$parentCatUp11" inherits="UIPanelScrollUpButtonTemplate">
+				<Size>
+					<AbsDimension x="15" y="15"/>
+				</Size>
+				<Anchors>
+					<Anchor point="TOPLEFT">
+						<Offset><AbsDimension x="100" y="-290"/></Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						BadKitty_BarOrder(11,"UP",BadKittyCFrames)
+					</OnClick>
+				</Scripts>
+			</Button>
+			<Button name="$parentCatUp12" inherits="UIPanelScrollUpButtonTemplate">
+				<Size>
+					<AbsDimension x="15" y="15"/>
+				</Size>
+				<Anchors>
+					<Anchor point="TOPLEFT">
+						<Offset><AbsDimension x="100" y="-310"/></Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						BadKitty_BarOrder(12,"UP",BadKittyCFrames)
+					</OnClick>
+				</Scripts>
+			</Button>
+			<Button name="$parentCatUp13" inherits="UIPanelScrollUpButtonTemplate">
+				<Size>
+					<AbsDimension x="15" y="15"/>
+				</Size>
+				<Anchors>
+					<Anchor point="TOPLEFT">
+						<Offset><AbsDimension x="100" y="-330"/></Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						BadKitty_BarOrder(13,"UP",BadKittyCFrames)
+					</OnClick>
+				</Scripts>
+			</Button>
+			<Button name="$parentCatUp14" inherits="UIPanelScrollUpButtonTemplate">
+				<Size>
+					<AbsDimension x="15" y="15"/>
+				</Size>
+				<Anchors>
+					<Anchor point="TOPLEFT">
+						<Offset><AbsDimension x="100" y="-350"/></Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						BadKitty_BarOrder(14,"UP",BadKittyCFrames)
+					</OnClick>
+				</Scripts>
+			</Button>
+			<Button name="$parentCatUp15" inherits="UIPanelScrollUpButtonTemplate">
+				<Size>
+					<AbsDimension x="15" y="15"/>
+				</Size>
+				<Anchors>
+					<Anchor point="TOPLEFT">
+						<Offset><AbsDimension x="100" y="-370"/></Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						BadKitty_BarOrder(15,"UP",BadKittyCFrames)
+					</OnClick>
+				</Scripts>
+			</Button>
+			<Button name="$parentCatDown1" inherits="UIPanelScrollDownButtonTemplate">
+				<Size>
+					<AbsDimension x="15" y="15"/>
+				</Size>
+				<Anchors>
+					<Anchor point="TOPLEFT">
+						<Offset><AbsDimension x="120" y="-90"/></Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						BadKitty_BarOrder(1,"DOWN",BadKittyCFrames)
+					</OnClick>
+				</Scripts>
+			</Button>
+			<Button name="$parentCatDown2" inherits="UIPanelScrollDownButtonTemplate">
+				<Size>
+					<AbsDimension x="15" y="15"/>
+				</Size>
+				<Anchors>
+					<Anchor point="TOPLEFT">
+						<Offset><AbsDimension x="120" y="-110"/></Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						BadKitty_BarOrder(2,"DOWN",BadKittyCFrames)
+					</OnClick>
+				</Scripts>
+			</Button>
+			<Button name="$parentCatDown3" inherits="UIPanelScrollDownButtonTemplate">
+				<Size>
+					<AbsDimension x="15" y="15"/>
+				</Size>
+				<Anchors>
+					<Anchor point="TOPLEFT">
+						<Offset><AbsDimension x="120" y="-130"/></Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						BadKitty_BarOrder(3,"DOWN",BadKittyCFrames)
+					</OnClick>
+				</Scripts>
+			</Button>
+			<Button name="$parentCatDown4" inherits="UIPanelScrollDownButtonTemplate">
+				<Size>
+					<AbsDimension x="15" y="15"/>
+				</Size>
+				<Anchors>
+					<Anchor point="TOPLEFT">
+						<Offset><AbsDimension x="120" y="-150"/></Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						BadKitty_BarOrder(4,"DOWN",BadKittyCFrames)
+					</OnClick>
+				</Scripts>
+			</Button>
+			<Button name="$parentCatDown5" inherits="UIPanelScrollDownButtonTemplate">
+				<Size>
+					<AbsDimension x="15" y="15"/>
+				</Size>
+				<Anchors>
+					<Anchor point="TOPLEFT">
+						<Offset><AbsDimension x="120" y="-170"/></Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						BadKitty_BarOrder(5,"DOWN",BadKittyCFrames)
+					</OnClick>
+				</Scripts>
+			</Button>
+			<Button name="$parentCatDown6" inherits="UIPanelScrollDownButtonTemplate">
+				<Size>
+					<AbsDimension x="15" y="15"/>
+				</Size>
+				<Anchors>
+					<Anchor point="TOPLEFT">
+						<Offset><AbsDimension x="120" y="-190"/></Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						BadKitty_BarOrder(6,"DOWN",BadKittyCFrames)
+					</OnClick>
+				</Scripts>
+			</Button>
+			<Button name="$parentCatDown7" inherits="UIPanelScrollDownButtonTemplate">
+				<Size>
+					<AbsDimension x="15" y="15"/>
+				</Size>
+				<Anchors>
+					<Anchor point="TOPLEFT">
+						<Offset><AbsDimension x="120" y="-210"/></Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						BadKitty_BarOrder(7,"DOWN",BadKittyCFrames)
+					</OnClick>
+				</Scripts>
+			</Button>
+			<Button name="$parentCatDown8" inherits="UIPanelScrollDownButtonTemplate">
+				<Size>
+					<AbsDimension x="15" y="15"/>
+				</Size>
+				<Anchors>
+					<Anchor point="TOPLEFT">
+						<Offset><AbsDimension x="120" y="-230"/></Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						BadKitty_BarOrder(8,"DOWN",BadKittyCFrames)
+					</OnClick>
+				</Scripts>
+			</Button>
+			<Button name="$parentCatDown9" inherits="UIPanelScrollDownButtonTemplate">
+				<Size>
+					<AbsDimension x="15" y="15"/>
+				</Size>
+				<Anchors>
+					<Anchor point="TOPLEFT">
+						<Offset><AbsDimension x="120" y="-250"/></Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						BadKitty_BarOrder(9,"DOWN",BadKittyCFrames)
+					</OnClick>
+				</Scripts>
+			</Button>
+			<Button name="$parentCatDown10" inherits="UIPanelScrollDownButtonTemplate">
+				<Size>
+					<AbsDimension x="15" y="15"/>
+				</Size>
+				<Anchors>
+					<Anchor point="TOPLEFT">
+						<Offset><AbsDimension x="120" y="-270"/></Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						BadKitty_BarOrder(10,"DOWN",BadKittyCFrames)
+					</OnClick>
+				</Scripts>
+			</Button>
+			<Button name="$parentCatDown11" inherits="UIPanelScrollDownButtonTemplate">
+				<Size>
+					<AbsDimension x="15" y="15"/>
+				</Size>
+				<Anchors>
+					<Anchor point="TOPLEFT">
+						<Offset><AbsDimension x="120" y="-290"/></Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						BadKitty_BarOrder(11,"DOWN",BadKittyCFrames)
+					</OnClick>
+				</Scripts>
+			</Button>
+			<Button name="$parentCatDown12" inherits="UIPanelScrollDownButtonTemplate">
+				<Size>
+					<AbsDimension x="15" y="15"/>
+				</Size>
+				<Anchors>
+					<Anchor point="TOPLEFT">
+						<Offset><AbsDimension x="120" y="-310"/></Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						BadKitty_BarOrder(12,"DOWN",BadKittyCFrames)
+					</OnClick>
+				</Scripts>
+			</Button>
+			<Button name="$parentCatDown13" inherits="UIPanelScrollDownButtonTemplate">
+				<Size>
+					<AbsDimension x="15" y="15"/>
+				</Size>
+				<Anchors>
+					<Anchor point="TOPLEFT">
+						<Offset><AbsDimension x="120" y="-330"/></Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						BadKitty_BarOrder(13,"DOWN",BadKittyCFrames)
+					</OnClick>
+				</Scripts>
+			</Button>
+			<Button name="$parentCatDown14" inherits="UIPanelScrollDownButtonTemplate">
+				<Size>
+					<AbsDimension x="15" y="15"/>
+				</Size>
+				<Anchors>
+					<Anchor point="TOPLEFT">
+						<Offset><AbsDimension x="120" y="-350"/></Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						BadKitty_BarOrder(14,"DOWN",BadKittyCFrames)
+					</OnClick>
+				</Scripts>
+			</Button>
+			<Button name="$parentBearUp2" inherits="UIPanelScrollUpButtonTemplate">
+				<Size>
+					<AbsDimension x="15" y="15"/>
+				</Size>
+				<Anchors>
+					<Anchor point="TOPLEFT">
+						<Offset><AbsDimension x="330" y="-110"/></Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						BadKitty_BarOrder(2,"UP",BadKittyBFrames)
+					</OnClick>
+				</Scripts>
+			</Button>
+			<Button name="$parentBearUp3" inherits="UIPanelScrollUpButtonTemplate">
+				<Size>
+					<AbsDimension x="15" y="15"/>
+				</Size>
+				<Anchors>
+					<Anchor point="TOPLEFT">
+						<Offset><AbsDimension x="330" y="-130"/></Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						BadKitty_BarOrder(3,"UP",BadKittyBFrames)
+					</OnClick>
+				</Scripts>
+			</Button>
+			<Button name="$parentBearUp4" inherits="UIPanelScrollUpButtonTemplate">
+				<Size>
+					<AbsDimension x="15" y="15"/>
+				</Size>
+				<Anchors>
+					<Anchor point="TOPLEFT">
+						<Offset><AbsDimension x="330" y="-150"/></Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						BadKitty_BarOrder(4,"UP",BadKittyBFrames)
+					</OnClick>
+				</Scripts>
+			</Button>
+			<Button name="$parentBearUp5" inherits="UIPanelScrollUpButtonTemplate">
+				<Size>
+					<AbsDimension x="15" y="15"/>
+				</Size>
+				<Anchors>
+					<Anchor point="TOPLEFT">
+						<Offset><AbsDimension x="330" y="-170"/></Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						BadKitty_BarOrder(5,"UP",BadKittyBFrames)
+					</OnClick>
+				</Scripts>
+			</Button>
+			<Button name="$parentBearUp6" inherits="UIPanelScrollUpButtonTemplate">
+				<Size>
+					<AbsDimension x="15" y="15"/>
+				</Size>
+				<Anchors>
+					<Anchor point="TOPLEFT">
+						<Offset><AbsDimension x="330" y="-190"/></Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						BadKitty_BarOrder(6,"UP",BadKittyBFrames)
+					</OnClick>
+				</Scripts>
+			</Button>
+			<Button name="$parentBearUp7" inherits="UIPanelScrollUpButtonTemplate">
+				<Size>
+					<AbsDimension x="15" y="15"/>
+				</Size>
+				<Anchors>
+					<Anchor point="TOPLEFT">
+						<Offset><AbsDimension x="330" y="-210"/></Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						BadKitty_BarOrder(7,"UP",BadKittyBFrames)
+					</OnClick>
+				</Scripts>
+			</Button>
+			<Button name="$parentBearDown1" inherits="UIPanelScrollDownButtonTemplate">
+				<Size>
+					<AbsDimension x="15" y="15"/>
+				</Size>
+				<Anchors>
+					<Anchor point="TOPLEFT">
+						<Offset><AbsDimension x="350" y="-90"/></Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						BadKitty_BarOrder(1,"DOWN",BadKittyBFrames)
+					</OnClick>
+				</Scripts>
+			</Button>
+			<Button name="$parentBearDown2" inherits="UIPanelScrollDownButtonTemplate">
+				<Size>
+					<AbsDimension x="15" y="15"/>
+				</Size>
+				<Anchors>
+					<Anchor point="TOPLEFT">
+						<Offset><AbsDimension x="350" y="-110"/></Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						BadKitty_BarOrder(2,"DOWN",BadKittyBFrames)
+					</OnClick>
+				</Scripts>
+			</Button>
+			<Button name="$parentBearDown3" inherits="UIPanelScrollDownButtonTemplate">
+				<Size>
+					<AbsDimension x="15" y="15"/>
+				</Size>
+				<Anchors>
+					<Anchor point="TOPLEFT">
+						<Offset><AbsDimension x="350" y="-130"/></Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						BadKitty_BarOrder(3,"DOWN",BadKittyBFrames)
+					</OnClick>
+				</Scripts>
+			</Button>
+			<Button name="$parentBearDown4" inherits="UIPanelScrollDownButtonTemplate">
+				<Size>
+					<AbsDimension x="15" y="15"/>
+				</Size>
+				<Anchors>
+					<Anchor point="TOPLEFT">
+						<Offset><AbsDimension x="350" y="-150"/></Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						BadKitty_BarOrder(4,"DOWN",BadKittyBFrames)
+					</OnClick>
+				</Scripts>
+			</Button>
+			<Button name="$parentBearDown5" inherits="UIPanelScrollDownButtonTemplate">
+				<Size>
+					<AbsDimension x="15" y="15"/>
+				</Size>
+				<Anchors>
+					<Anchor point="TOPLEFT">
+						<Offset><AbsDimension x="350" y="-170"/></Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						BadKitty_BarOrder(5,"DOWN",BadKittyBFrames)
+					</OnClick>
+				</Scripts>
+			</Button>
+			<Button name="$parentBearDown6" inherits="UIPanelScrollDownButtonTemplate">
+				<Size>
+					<AbsDimension x="15" y="15"/>
+				</Size>
+				<Anchors>
+					<Anchor point="TOPLEFT">
+						<Offset><AbsDimension x="350" y="-190"/></Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						BadKitty_BarOrder(6,"DOWN",BadKittyBFrames)
+					</OnClick>
+				</Scripts>
+			</Button>
+			<CheckButton name="$parentCatRadio1" inherits="SendMailRadioButtonTemplate">
+				<Anchors>
+					<Anchor point="TOPLEFT">
+						<Offset><AbsDimension x="140" y="-90"/></Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						BadKitty_CatRadioOff()
+						this:SetChecked(1)
+						BadKittyCatCount=1
+						BadKitty_SetFrames()
+					</OnClick>
+				</Scripts>
+			</CheckButton>
+			<CheckButton name="$parentCatRadio2" inherits="SendMailRadioButtonTemplate">
+				<Anchors>
+					<Anchor point="TOPLEFT">
+						<Offset><AbsDimension x="140" y="-110"/></Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						BadKitty_CatRadioOff()
+						this:SetChecked(1)
+						BadKittyCatCount=2
+						BadKitty_SetFrames()
+					</OnClick>
+				</Scripts>
+			</CheckButton>
+			<CheckButton name="$parentCatRadio3" inherits="SendMailRadioButtonTemplate">
+				<Anchors>
+					<Anchor point="TOPLEFT">
+						<Offset><AbsDimension x="140" y="-130"/></Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						BadKitty_CatRadioOff()
+						this:SetChecked(1)
+						BadKittyCatCount=3
+						BadKitty_SetFrames()
+					</OnClick>
+				</Scripts>
+			</CheckButton>
+			<CheckButton name="$parentCatRadio4" inherits="SendMailRadioButtonTemplate">
+				<Anchors>
+					<Anchor point="TOPLEFT">
+						<Offset><AbsDimension x="140" y="-150"/></Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						BadKitty_CatRadioOff()
+						this:SetChecked(1)
+						BadKittyCatCount=4
+						BadKitty_SetFrames()
+					</OnClick>
+				</Scripts>
+			</CheckButton>
+			<CheckButton name="$parentCatRadio5" inherits="SendMailRadioButtonTemplate">
+				<Anchors>
+					<Anchor point="TOPLEFT">
+						<Offset><AbsDimension x="140" y="-170"/></Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						BadKitty_CatRadioOff()
+						this:SetChecked(1)
+						BadKittyCatCount=5
+						BadKitty_SetFrames()
+					</OnClick>
+				</Scripts>
+			</CheckButton>
+			<CheckButton name="$parentCatRadio6" inherits="SendMailRadioButtonTemplate">
+				<Anchors>
+					<Anchor point="TOPLEFT">
+						<Offset><AbsDimension x="140" y="-190"/></Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						BadKitty_CatRadioOff()
+						this:SetChecked(1)
+						BadKittyCatCount=6
+						BadKitty_SetFrames()
+					</OnClick>
+				</Scripts>
+			</CheckButton>
+			<CheckButton name="$parentCatRadio7" inherits="SendMailRadioButtonTemplate">
+				<Anchors>
+					<Anchor point="TOPLEFT">
+						<Offset><AbsDimension x="140" y="-210"/></Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						BadKitty_CatRadioOff()
+						this:SetChecked(1)
+						BadKittyCatCount=7
+						BadKitty_SetFrames()
+					</OnClick>
+				</Scripts>
+			</CheckButton>
+			<CheckButton name="$parentCatRadio8" inherits="SendMailRadioButtonTemplate">
+				<Anchors>
+					<Anchor point="TOPLEFT">
+						<Offset><AbsDimension x="140" y="-230"/></Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						BadKitty_CatRadioOff()
+						this:SetChecked(1)
+						BadKittyCatCount=8
+						BadKitty_SetFrames()
+					</OnClick>
+				</Scripts>
+			</CheckButton>
+			<CheckButton name="$parentCatRadio9" inherits="SendMailRadioButtonTemplate">
+				<Anchors>
+					<Anchor point="TOPLEFT">
+						<Offset><AbsDimension x="140" y="-250"/></Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						BadKitty_CatRadioOff()
+						this:SetChecked(1)
+						BadKittyCatCount=9
+						BadKitty_SetFrames()
+					</OnClick>
+				</Scripts>
+			</CheckButton>
+			<CheckButton name="$parentCatRadio10" inherits="SendMailRadioButtonTemplate">
+				<Anchors>
+					<Anchor point="TOPLEFT">
+						<Offset><AbsDimension x="140" y="-270"/></Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						BadKitty_CatRadioOff()
+						this:SetChecked(1)
+						BadKittyCatCount=10
+						BadKitty_SetFrames()
+					</OnClick>
+				</Scripts>
+			</CheckButton>
+			<CheckButton name="$parentCatRadio11" inherits="SendMailRadioButtonTemplate">
+				<Anchors>
+					<Anchor point="TOPLEFT">
+						<Offset><AbsDimension x="140" y="-290"/></Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						BadKitty_CatRadioOff()
+						this:SetChecked(1)
+						BadKittyCatCount=11
+						BadKitty_SetFrames()
+					</OnClick>
+				</Scripts>
+			</CheckButton>
+			<CheckButton name="$parentCatRadio12" inherits="SendMailRadioButtonTemplate">
+				<Anchors>
+					<Anchor point="TOPLEFT">
+						<Offset><AbsDimension x="140" y="-310"/></Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						BadKitty_CatRadioOff()
+						this:SetChecked(1)
+						BadKittyCatCount=12
+						BadKitty_SetFrames()
+					</OnClick>
+				</Scripts>
+			</CheckButton>
+			<CheckButton name="$parentCatRadio13" inherits="SendMailRadioButtonTemplate">
+				<Anchors>
+					<Anchor point="TOPLEFT">
+						<Offset><AbsDimension x="140" y="-330"/></Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						BadKitty_CatRadioOff()
+						this:SetChecked(1)
+						BadKittyCatCount=13
+						BadKitty_SetFrames()
+					</OnClick>
+				</Scripts>
+			</CheckButton>
+			<CheckButton name="$parentCatRadio14" inherits="SendMailRadioButtonTemplate">
+				<Anchors>
+					<Anchor point="TOPLEFT">
+						<Offset><AbsDimension x="140" y="-350"/></Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						BadKitty_CatRadioOff()
+						this:SetChecked(1)
+						BadKittyCatCount=14
+						BadKitty_SetFrames()
+					</OnClick>
+				</Scripts>
+			</CheckButton>
+			<CheckButton name="$parentCatRadio15" inherits="SendMailRadioButtonTemplate">
+				<Anchors>
+					<Anchor point="TOPLEFT">
+						<Offset><AbsDimension x="140" y="-370"/></Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						BadKitty_CatRadioOff()
+						this:SetChecked(1)
+						BadKittyCatCount=15
+						BadKitty_SetFrames()
+					</OnClick>
+				</Scripts>
+			</CheckButton>
+			<CheckButton name="$parentBearRadio1" inherits="SendMailRadioButtonTemplate">
+				<Anchors>
+					<Anchor point="TOPLEFT">
+						<Offset><AbsDimension x="370" y="-90"/></Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						BadKitty_BearRadioOff()
+						this:SetChecked(1)
+						BadKittyBearCount=1
+						BadKitty_SetFrames()
+					</OnClick>
+				</Scripts>
+			</CheckButton>
+			<CheckButton name="$parentBearRadio2" inherits="SendMailRadioButtonTemplate">
+				<Anchors>
+					<Anchor point="TOPLEFT">
+						<Offset><AbsDimension x="370" y="-110"/></Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						BadKitty_BearRadioOff()
+						this:SetChecked(1)
+						BadKittyBearCount=2
+						BadKitty_SetFrames()
+					</OnClick>
+				</Scripts>
+			</CheckButton>
+			<CheckButton name="$parentBearRadio3" inherits="SendMailRadioButtonTemplate">
+				<Anchors>
+					<Anchor point="TOPLEFT">
+						<Offset><AbsDimension x="370" y="-130"/></Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						BadKitty_BearRadioOff()
+						this:SetChecked(1)
+						BadKittyBearCount=3
+						BadKitty_SetFrames()
+					</OnClick>
+				</Scripts>
+			</CheckButton>
+			<CheckButton name="$parentBearRadio4" inherits="SendMailRadioButtonTemplate">
+				<Anchors>
+					<Anchor point="TOPLEFT">
+						<Offset><AbsDimension x="370" y="-150"/></Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						BadKitty_BearRadioOff()
+						this:SetChecked(1)
+						BadKittyBearCount=4
+						BadKitty_SetFrames()
+					</OnClick>
+				</Scripts>
+			</CheckButton>
+			<CheckButton name="$parentBearRadio5" inherits="SendMailRadioButtonTemplate">
+				<Anchors>
+					<Anchor point="TOPLEFT">
+						<Offset><AbsDimension x="370" y="-170"/></Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						BadKitty_BearRadioOff()
+						this:SetChecked(1)
+						BadKittyBearCount=5
+						BadKitty_SetFrames()
+					</OnClick>
+				</Scripts>
+			</CheckButton>
+			<CheckButton name="$parentBearRadio6" inherits="SendMailRadioButtonTemplate">
+				<Anchors>
+					<Anchor point="TOPLEFT">
+						<Offset><AbsDimension x="370" y="-190"/></Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						BadKitty_BearRadioOff()
+						this:SetChecked(1)
+						BadKittyBearCount=6
+						BadKitty_SetFrames()
+					</OnClick>
+				</Scripts>
+			</CheckButton>
+			<CheckButton name="$parentBearRadio7" inherits="SendMailRadioButtonTemplate">
+				<Anchors>
+					<Anchor point="TOPLEFT">
+						<Offset><AbsDimension x="370" y="-210"/></Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						BadKitty_BearRadioOff()
+						this:SetChecked(1)
+						BadKittyBearCount=7
+						BadKitty_SetFrames()
+					</OnClick>
+				</Scripts>
+			</CheckButton>
+		</Frames>
+	</Frame>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<Frame name="BadKittyWarnOptions" parent="UIParent">
+		<Scripts>
+			<OnLoad>
+				BadKitty_OptionsLoad(self,"Warning Layout")
+				BadKittyWarnOptionsDescription:SetText("Use the arrows to move each spell up and down in order.\nThis will be the order they appear in their frames.  Use the radio\n buttons on the right to limit the number of spells shown.  \nNo spells below the radio button will be visible.")
+				--BadKittyWarnOptionsDescription2:SetText("")
+			</OnLoad>
+			<OnShow>
+				this:SetBackdropColor(0.9,0.9,0.9,0.9)
+				BadKitty_WarnOptionsText()
+				BadKitty_BearWarnOptionsText()
+				BadKitty_WCatRadioOff()
+				BadKitty_WBearRadioOff()
+				BadKitty_WOCatRadioOff()
+				BadKitty_WOBearRadioOff()
+				getglobal("BadKittyWarnOptionsCatRadio"..BadKittyWCatCount):SetChecked(1)
+				getglobal("BadKittyWarnOptionsBearRadio"..BadKittyWBearCount):SetChecked(1)
+				BadKittyWarnOptionsCatColumns:SetChecked(0)
+				BadKittyWarnOptionsCatRows:SetChecked(0)
+				BadKittyWarnOptionsBearColumns:SetChecked(0)
+				BadKittyWarnOptionsCatRows:SetChecked(0)
+				if BadKittySaves[14][2]=="c" then BadKittyWarnOptionsCatColumns:SetChecked(1)
+				else BadKittyWarnOptionsCatRows:SetChecked(1) end
+				if BadKittySaves[15][2]=="c" then BadKittyWarnOptionsBearColumns:SetChecked(1)
+				else BadKittyWarnOptionsBearRows:SetChecked(1) end
+			</OnShow>
+		</Scripts>
+			<Layers>
+				<Layer level="BACKGROUND">
+					<Texture name="$parent_Background" setAllPoints="true">
+						<Color r=".1" g=".1" b=".1" a="0.5" /> 
+					</Texture>
+				</Layer>
+				<Layer>
+					<FontString name="$parentDescription" inherits="NumberFontNormal">
+						<Anchors>
+							<Anchor point="TOPLEFT">
+								<Offset><AbsDimension x="10" y="-10"/></Offset>
+							</Anchor>
+						</Anchors>
+					</FontString>
+					<!--<FontString name="$parentDescription2" inherits="NumberFontNormal">
+						<Anchors>
+							<Anchor point="TOPLEFT">
+								<Offset><AbsDimension x="10" y="-10"/></Offset>
+							</Anchor>
+						</Anchors>
+					</FontString>-->
+					<FontString name="$parentCatTitle" inherits="GameFontNormalLarge" text="Cat Warnings">
+						<Anchors>
+							<Anchor point="TOPLEFT">
+								<Offset><AbsDimension x="20" y="-70"/></Offset>
+							</Anchor>
+						</Anchors>
+					</FontString>
+					<FontString name="$parentCatOrientation" inherits="GameFontNormalLarge" text="Cat Orientation">
+						<Anchors>
+							<Anchor point="TOPLEFT">
+								<Offset><AbsDimension x="250" y="-310"/></Offset>
+							</Anchor>
+						</Anchors>
+					</FontString>
+					<FontString name="$parentCatText1" inherits="GameFontNormalSmall">
+						<Anchors>
+							<Anchor point="TOPLEFT">
+								<Offset><AbsDimension x="20" y="-90"/></Offset>
+							</Anchor>
+						</Anchors>
+					</FontString>
+					<FontString name="$parentCatText2" inherits="GameFontNormalSmall">
+						<Anchors>
+							<Anchor point="TOPLEFT">
+								<Offset><AbsDimension x="20" y="-110"/></Offset>
+							</Anchor>
+						</Anchors>
+					</FontString>
+					<FontString name="$parentCatText3" inherits="GameFontNormalSmall">
+						<Anchors>
+							<Anchor point="TOPLEFT">
+								<Offset><AbsDimension x="20" y="-130"/></Offset>
+							</Anchor>
+						</Anchors>
+					</FontString>
+					<FontString name="$parentCatText4" inherits="GameFontNormalSmall">
+						<Anchors>
+							<Anchor point="TOPLEFT">
+								<Offset><AbsDimension x="20" y="-150"/></Offset>
+							</Anchor>
+						</Anchors>
+					</FontString>
+					<FontString name="$parentCatText5" inherits="GameFontNormalSmall">
+						<Anchors>
+							<Anchor point="TOPLEFT">
+								<Offset><AbsDimension x="20" y="-170"/></Offset>
+							</Anchor>
+						</Anchors>
+					</FontString>
+					<FontString name="$parentCatText6" inherits="GameFontNormalSmall">
+						<Anchors>
+							<Anchor point="TOPLEFT">
+								<Offset><AbsDimension x="20" y="-190"/></Offset>
+							</Anchor>
+						</Anchors>
+					</FontString>
+					<FontString name="$parentCatText7" inherits="GameFontNormalSmall">
+						<Anchors>
+							<Anchor point="TOPLEFT">
+								<Offset><AbsDimension x="20" y="-210"/></Offset>
+							</Anchor>
+						</Anchors>
+					</FontString>
+					<FontString name="$parentCatText8" inherits="GameFontNormalSmall">
+						<Anchors>
+							<Anchor point="TOPLEFT">
+								<Offset><AbsDimension x="20" y="-230"/></Offset>
+							</Anchor>
+						</Anchors>
+					</FontString>
+					<FontString name="$parentCatText9" inherits="GameFontNormalSmall">
+						<Anchors>
+							<Anchor point="TOPLEFT">
+								<Offset><AbsDimension x="20" y="-250"/></Offset>
+							</Anchor>
+						</Anchors>
+					</FontString>
+					<FontString name="$parentCatText10" inherits="GameFontNormalSmall">
+						<Anchors>
+							<Anchor point="TOPLEFT">
+								<Offset><AbsDimension x="20" y="-270"/></Offset>
+							</Anchor>
+						</Anchors>
+					</FontString>
+					<FontString name="$parentCatText11" inherits="GameFontNormalSmall">
+						<Anchors>
+							<Anchor point="TOPLEFT">
+								<Offset><AbsDimension x="20" y="-290"/></Offset>
+							</Anchor>
+						</Anchors>
+					</FontString>
+					<FontString name="$parentCatText12" inherits="GameFontNormalSmall">
+						<Anchors>
+							<Anchor point="TOPLEFT">
+								<Offset><AbsDimension x="20" y="-310"/></Offset>
+							</Anchor>
+						</Anchors>
+					</FontString>
+					<FontString name="$parentCatText13" inherits="GameFontNormalSmall">
+						<Anchors>
+							<Anchor point="TOPLEFT">
+								<Offset><AbsDimension x="20" y="-330"/></Offset>
+							</Anchor>
+						</Anchors>
+					</FontString>
+					<FontString name="$parentCatText0" inherits="GameFontNormalSmall">
+						<Anchors>
+							<Anchor point="TOPLEFT">
+								<Offset><AbsDimension x="20" y="-350"/></Offset>
+							</Anchor>
+						</Anchors>
+					</FontString>
+					<FontString name="$parentBearTitle" inherits="GameFontNormalLarge" text="Bear Warnings">
+						<Anchors>
+							<Anchor point="TOPLEFT">
+								<Offset><AbsDimension x="250" y="-70"/></Offset>
+							</Anchor>
+						</Anchors>
+					</FontString>
+					<FontString name="$parentBearOrientation" inherits="GameFontNormalLarge" text="Bear Orientation">
+						<Anchors>
+							<Anchor point="TOPLEFT">
+								<Offset><AbsDimension x="250" y="-215"/></Offset>
+							</Anchor>
+						</Anchors>
+					</FontString>
+					<FontString name="$parentBearText1" inherits="GameFontNormalSmall">
+						<Anchors>
+							<Anchor point="TOPLEFT">
+								<Offset><AbsDimension x="250" y="-90"/></Offset>
+							</Anchor>
+						</Anchors>
+					</FontString>
+					<FontString name="$parentBearText2" inherits="GameFontNormalSmall">
+						<Anchors>
+							<Anchor point="TOPLEFT">
+								<Offset><AbsDimension x="250" y="-110"/></Offset>
+							</Anchor>
+						</Anchors>
+					</FontString>
+					<FontString name="$parentBearText3" inherits="GameFontNormalSmall">
+						<Anchors>
+							<Anchor point="TOPLEFT">
+								<Offset><AbsDimension x="250" y="-130"/></Offset>
+							</Anchor>
+						</Anchors>
+					</FontString>
+					<FontString name="$parentBearText4" inherits="GameFontNormalSmall">
+						<Anchors>
+							<Anchor point="TOPLEFT">
+								<Offset><AbsDimension x="250" y="-150"/></Offset>
+							</Anchor>
+						</Anchors>
+					</FontString>
+					<FontString name="$parentBearText5" inherits="GameFontNormalSmall">
+						<Anchors>
+							<Anchor point="TOPLEFT">
+								<Offset><AbsDimension x="250" y="-170"/></Offset>
+							</Anchor>
+						</Anchors>
+					</FontString>
+					<FontString name="$parentBearText6" inherits="GameFontNormalSmall">
+						<Anchors>
+							<Anchor point="TOPLEFT">
+								<Offset><AbsDimension x="250" y="-190"/></Offset>
+							</Anchor>
+						</Anchors>
+					</FontString>
+					<FontString name="$parentBearText7" inherits="GameFontNormalSmall">
+						<Anchors>
+							<Anchor point="TOPLEFT">
+								<Offset><AbsDimension x="250" y="-210"/></Offset>
+							</Anchor>
+						</Anchors>
+					</FontString>
+					<FontString name="$parentBearText8" inherits="GameFontNormalSmall">
+						<Anchors>
+							<Anchor point="TOPLEFT">
+								<Offset><AbsDimension x="250" y="-230"/></Offset>
+							</Anchor>
+						</Anchors>
+					</FontString>
+					<FontString name="$parentBearText9" inherits="GameFontNormalSmall">
+						<Anchors>
+							<Anchor point="TOPLEFT">
+								<Offset><AbsDimension x="250" y="-250"/></Offset>
+							</Anchor>
+						</Anchors>
+					</FontString>
+					<FontString name="$parentBearText0" inherits="GameFontNormalSmall">
+						<Anchors>
+							<Anchor point="TOPLEFT">
+								<Offset><AbsDimension x="250" y="-270"/></Offset>
+							</Anchor>
+						</Anchors>
+					</FontString>
+					<FontString name="$parentCatSquareText" inherits="GameFontNormalSmall">
+						<Anchors>
+							<Anchor point="TOPLEFT">
+								<Offset><AbsDimension x="35" y="-320"/></Offset>
+							</Anchor>
+						</Anchors>
+					</FontString>
+					<FontString name="$parentCatHBoxText" inherits="GameFontNormalSmall">
+						<Anchors>
+							<Anchor point="TOPLEFT">
+								<Offset><AbsDimension x="30" y="-360"/></Offset>
+							</Anchor>
+						</Anchors>
+					</FontString>
+					<FontString name="$parentCatVBoxText" inherits="GameFontNormalSmall">
+						<Anchors>
+							<Anchor point="TOPLEFT">
+								<Offset><AbsDimension x="105" y="-320"/></Offset>
+							</Anchor>
+						</Anchors>
+					</FontString>
+					<FontString name="$parentCatHLineText" inherits="GameFontNormalSmall">
+						<Anchors>
+							<Anchor point="TOPLEFT">
+								<Offset><AbsDimension x="30" y="-400"/></Offset>
+							</Anchor>
+						</Anchors>
+					</FontString>
+					<FontString name="$parentCatVLineText" inherits="GameFontNormalSmall">
+						<Anchors>
+							<Anchor point="TOPLEFT">
+								<Offset><AbsDimension x="163" y="-317"/></Offset>
+							</Anchor>
+						</Anchors>
+					</FontString>
+					<FontString name="$parentBearHBoxText" inherits="GameFontNormalSmall">
+						<Anchors>
+							<Anchor point="TOPLEFT">
+								<Offset><AbsDimension x="263" y="-360"/></Offset>
+							</Anchor>
+						</Anchors>
+					</FontString>
+					<FontString name="$parentBearVBoxText" inherits="GameFontNormalSmall">
+						<Anchors>
+							<Anchor point="TOPLEFT">
+								<Offset><AbsDimension x="305" y="-320"/></Offset>
+							</Anchor>
+						</Anchors>
+					</FontString>
+					<FontString name="$parentBearHLineText" inherits="GameFontNormalSmall">
+						<Anchors>
+							<Anchor point="TOPLEFT">
+								<Offset><AbsDimension x="260" y="-400"/></Offset>
+							</Anchor>
+						</Anchors>
+					</FontString>
+					<FontString name="$parentBearVLineText" inherits="GameFontNormalSmall">
+						<Anchors>
+							<Anchor point="TOPLEFT">
+								<Offset><AbsDimension x="363" y="-317"/></Offset>
+							</Anchor>
+						</Anchors>
+					</FontString>
+				</Layer>
+			</Layers>
+		<Frames>
+			<Button name="$parentCatUp2" inherits="UIPanelScrollUpButtonTemplate">
+				<Size>
+					<AbsDimension x="15" y="15"/>
+				</Size>
+				<Anchors>
+					<Anchor point="TOPLEFT">
+						<Offset><AbsDimension x="100" y="-110"/></Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						BadKitty_WarnOrder(2,"UP",BadKittyWCFrames)
+						BadKitty_WarnOptionsText()
+					</OnClick>
+				</Scripts>
+			</Button>
+			<Button name="$parentCatUp3" inherits="UIPanelScrollUpButtonTemplate">
+				<Size>
+					<AbsDimension x="15" y="15"/>
+				</Size>
+				<Anchors>
+					<Anchor point="TOPLEFT">
+						<Offset><AbsDimension x="100" y="-130"/></Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						BadKitty_WarnOrder(3,"UP",BadKittyWCFrames)
+						BadKitty_WarnOptionsText()
+					</OnClick>
+				</Scripts>
+			</Button>
+			<Button name="$parentCatUp4" inherits="UIPanelScrollUpButtonTemplate">
+				<Size>
+					<AbsDimension x="15" y="15"/>
+				</Size>
+				<Anchors>
+					<Anchor point="TOPLEFT">
+						<Offset><AbsDimension x="100" y="-150"/></Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						BadKitty_WarnOrder(4,"UP",BadKittyWCFrames)
+						BadKitty_WarnOptionsText()
+					</OnClick>
+				</Scripts>
+			</Button>
+			<Button name="$parentCatUp5" inherits="UIPanelScrollUpButtonTemplate">
+				<Size>
+					<AbsDimension x="15" y="15"/>
+				</Size>
+				<Anchors>
+					<Anchor point="TOPLEFT">
+						<Offset><AbsDimension x="100" y="-170"/></Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						BadKitty_WarnOrder(5,"UP",BadKittyWCFrames)
+						BadKitty_WarnOptionsText()
+					</OnClick>
+				</Scripts>
+			</Button>
+			<Button name="$parentCatUp6" inherits="UIPanelScrollUpButtonTemplate">
+				<Size>
+					<AbsDimension x="15" y="15"/>
+				</Size>
+				<Anchors>
+					<Anchor point="TOPLEFT">
+						<Offset><AbsDimension x="100" y="-190"/></Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						BadKitty_WarnOrder(6,"UP",BadKittyWCFrames)
+						BadKitty_WarnOptionsText()
+					</OnClick>
+				</Scripts>
+			</Button>
+			<Button name="$parentCatUp7" inherits="UIPanelScrollUpButtonTemplate">
+				<Size>
+					<AbsDimension x="15" y="15"/>
+				</Size>
+				<Anchors>
+					<Anchor point="TOPLEFT">
+						<Offset><AbsDimension x="100" y="-210"/></Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						BadKitty_WarnOrder(7,"UP",BadKittyWCFrames)
+						BadKitty_WarnOptionsText()
+					</OnClick>
+				</Scripts>
+			</Button>
+			<Button name="$parentCatUp8" inherits="UIPanelScrollUpButtonTemplate">
+				<Size>
+					<AbsDimension x="15" y="15"/>
+				</Size>
+				<Anchors>
+					<Anchor point="TOPLEFT">
+						<Offset><AbsDimension x="100" y="-230"/></Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						BadKitty_WarnOrder(8,"UP",BadKittyWCFrames)
+						BadKitty_WarnOptionsText()
+					</OnClick>
+				</Scripts>
+			</Button>
+			<Button name="$parentCatUp9" inherits="UIPanelScrollUpButtonTemplate">
+				<Size>
+					<AbsDimension x="15" y="15"/>
+				</Size>
+				<Anchors>
+					<Anchor point="TOPLEFT">
+						<Offset><AbsDimension x="100" y="-250"/></Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						BadKitty_WarnOrder(9,"UP",BadKittyWCFrames)
+						BadKitty_WarnOptionsText()
+					</OnClick>
+				</Scripts>
+			</Button>
+			<Button name="$parentCatUp10" inherits="UIPanelScrollUpButtonTemplate">
+				<Size>
+					<AbsDimension x="15" y="15"/>
+				</Size>
+				<Anchors>
+					<Anchor point="TOPLEFT">
+						<Offset><AbsDimension x="100" y="-270"/></Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						BadKitty_WarnOrder(10,"UP",BadKittyWCFrames)
+						BadKitty_WarnOptionsText()
+					</OnClick>
+				</Scripts>
+			</Button>
+			<Button name="$parentCatUp11" inherits="UIPanelScrollUpButtonTemplate">
+				<Size>
+					<AbsDimension x="15" y="15"/>
+				</Size>
+				<Anchors>
+					<Anchor point="TOPLEFT">
+						<Offset><AbsDimension x="100" y="-290"/></Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						BadKitty_WarnOrder(11,"UP",BadKittyWCFrames)
+						BadKitty_WarnOptionsText()
+					</OnClick>
+				</Scripts>
+			</Button>
+			<Button name="$parentCatUp12" inherits="UIPanelScrollUpButtonTemplate">
+				<Size>
+					<AbsDimension x="15" y="15"/>
+				</Size>
+				<Anchors>
+					<Anchor point="TOPLEFT">
+						<Offset><AbsDimension x="100" y="-310"/></Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						BadKitty_WarnOrder(12,"UP",BadKittyWCFrames)
+						BadKitty_WarnOptionsText()
+					</OnClick>
+				</Scripts>
+			</Button>
+			<Button name="$parentCatUp13" inherits="UIPanelScrollUpButtonTemplate">
+				<Size>
+					<AbsDimension x="15" y="15"/>
+				</Size>
+				<Anchors>
+					<Anchor point="TOPLEFT">
+						<Offset><AbsDimension x="100" y="-330"/></Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						BadKitty_WarnOrder(13,"UP",BadKittyWCFrames)
+						BadKitty_WarnOptionsText()
+					</OnClick>
+				</Scripts>
+			</Button>
+			<Button name="$parentCatDown1" inherits="UIPanelScrollDownButtonTemplate">
+				<Size>
+					<AbsDimension x="15" y="15"/>
+				</Size>
+				<Anchors>
+					<Anchor point="TOPLEFT">
+						<Offset><AbsDimension x="120" y="-90"/></Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						BadKitty_WarnOrder(1,"DOWN",BadKittyWCFrames)
+						BadKitty_WarnOptionsText()
+					</OnClick>
+				</Scripts>
+			</Button>
+			<Button name="$parentCatDown2" inherits="UIPanelScrollDownButtonTemplate">
+				<Size>
+					<AbsDimension x="15" y="15"/>
+				</Size>
+				<Anchors>
+					<Anchor point="TOPLEFT">
+						<Offset><AbsDimension x="120" y="-110"/></Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						BadKitty_WarnOrder(2,"DOWN",BadKittyWCFrames)
+						BadKitty_WarnOptionsText()
+					</OnClick>
+				</Scripts>
+			</Button>
+			<Button name="$parentCatDown3" inherits="UIPanelScrollDownButtonTemplate">
+				<Size>
+					<AbsDimension x="15" y="15"/>
+				</Size>
+				<Anchors>
+					<Anchor point="TOPLEFT">
+						<Offset><AbsDimension x="120" y="-130"/></Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						BadKitty_WarnOrder(3,"DOWN",BadKittyWCFrames)
+						BadKitty_WarnOptionsText()
+					</OnClick>
+				</Scripts>
+			</Button>
+			<Button name="$parentCatDown4" inherits="UIPanelScrollDownButtonTemplate">
+				<Size>
+					<AbsDimension x="15" y="15"/>
+				</Size>
+				<Anchors>
+					<Anchor point="TOPLEFT">
+						<Offset><AbsDimension x="120" y="-150"/></Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						BadKitty_WarnOrder(4,"DOWN",BadKittyWCFrames)
+						BadKitty_WarnOptionsText()
+					</OnClick>
+				</Scripts>
+			</Button>
+			<Button name="$parentCatDown5" inherits="UIPanelScrollDownButtonTemplate">
+				<Size>
+					<AbsDimension x="15" y="15"/>
+				</Size>
+				<Anchors>
+					<Anchor point="TOPLEFT">
+						<Offset><AbsDimension x="120" y="-170"/></Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						BadKitty_WarnOrder(5,"DOWN",BadKittyWCFrames)
+						BadKitty_WarnOptionsText()
+					</OnClick>
+				</Scripts>
+			</Button>
+			<Button name="$parentCatDown6" inherits="UIPanelScrollDownButtonTemplate">
+				<Size>
+					<AbsDimension x="15" y="15"/>
+				</Size>
+				<Anchors>
+					<Anchor point="TOPLEFT">
+						<Offset><AbsDimension x="120" y="-190"/></Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						BadKitty_WarnOrder(6,"DOWN",BadKittyWCFrames)
+						BadKitty_WarnOptionsText()
+					</OnClick>
+				</Scripts>
+			</Button>
+			<Button name="$parentCatDown7" inherits="UIPanelScrollDownButtonTemplate">
+				<Size>
+					<AbsDimension x="15" y="15"/>
+				</Size>
+				<Anchors>
+					<Anchor point="TOPLEFT">
+						<Offset><AbsDimension x="120" y="-210"/></Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						BadKitty_WarnOrder(7,"DOWN",BadKittyWCFrames)
+						BadKitty_WarnOptionsText()
+					</OnClick>
+				</Scripts>
+			</Button>
+			<Button name="$parentCatDown8" inherits="UIPanelScrollDownButtonTemplate">
+				<Size>
+					<AbsDimension x="15" y="15"/>
+				</Size>
+				<Anchors>
+					<Anchor point="TOPLEFT">
+						<Offset><AbsDimension x="120" y="-230"/></Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						BadKitty_WarnOrder(8,"DOWN",BadKittyWCFrames)
+						BadKitty_WarnOptionsText()
+					</OnClick>
+				</Scripts>
+			</Button>
+			<Button name="$parentCatDown9" inherits="UIPanelScrollDownButtonTemplate">
+				<Size>
+					<AbsDimension x="15" y="15"/>
+				</Size>
+				<Anchors>
+					<Anchor point="TOPLEFT">
+						<Offset><AbsDimension x="120" y="-250"/></Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						BadKitty_WarnOrder(9,"DOWN",BadKittyWCFrames)
+						BadKitty_WarnOptionsText()
+					</OnClick>
+				</Scripts>
+			</Button>
+			<Button name="$parentCatDown10" inherits="UIPanelScrollDownButtonTemplate">
+				<Size>
+					<AbsDimension x="15" y="15"/>
+				</Size>
+				<Anchors>
+					<Anchor point="TOPLEFT">
+						<Offset><AbsDimension x="120" y="-270"/></Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						BadKitty_WarnOrder(10,"DOWN",BadKittyWCFrames)
+						BadKitty_WarnOptionsText()
+					</OnClick>
+				</Scripts>
+			</Button>
+			<Button name="$parentCatDown11" inherits="UIPanelScrollDownButtonTemplate">
+				<Size>
+					<AbsDimension x="15" y="15"/>
+				</Size>
+				<Anchors>
+					<Anchor point="TOPLEFT">
+						<Offset><AbsDimension x="120" y="-290"/></Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						BadKitty_WarnOrder(11,"DOWN",BadKittyWCFrames)
+						BadKitty_WarnOptionsText()
+					</OnClick>
+				</Scripts>
+			</Button>
+			<Button name="$parentCatDown12" inherits="UIPanelScrollDownButtonTemplate">
+				<Size>
+					<AbsDimension x="15" y="15"/>
+				</Size>
+				<Anchors>
+					<Anchor point="TOPLEFT">
+						<Offset><AbsDimension x="120" y="-310"/></Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						BadKitty_WarnOrder(12,"DOWN",BadKittyWCFrames)
+						BadKitty_WarnOptionsText()
+					</OnClick>
+				</Scripts>
+			</Button>
+			<Button name="$parentBearUp2" inherits="UIPanelScrollUpButtonTemplate">
+				<Size>
+					<AbsDimension x="15" y="15"/>
+				</Size>
+				<Anchors>
+					<Anchor point="TOPLEFT">
+						<Offset><AbsDimension x="330" y="-110"/></Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						BadKitty_WarnOrder(2,"UP",BadKittyWBFrames)
+						BadKitty_BearWarnOptionsText()
+					</OnClick>
+				</Scripts>
+			</Button>
+			<Button name="$parentBearUp3" inherits="UIPanelScrollUpButtonTemplate">
+				<Size>
+					<AbsDimension x="15" y="15"/>
+				</Size>
+				<Anchors>
+					<Anchor point="TOPLEFT">
+						<Offset><AbsDimension x="330" y="-130"/></Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						BadKitty_WarnOrder(3,"UP",BadKittyWBFrames)
+						BadKitty_BearWarnOptionsText()
+					</OnClick>
+				</Scripts>
+			</Button>
+			<Button name="$parentBearUp4" inherits="UIPanelScrollUpButtonTemplate">
+				<Size>
+					<AbsDimension x="15" y="15"/>
+				</Size>
+				<Anchors>
+					<Anchor point="TOPLEFT">
+						<Offset><AbsDimension x="330" y="-150"/></Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						BadKitty_WarnOrder(4,"UP",BadKittyWBFrames)
+						BadKitty_BearWarnOptionsText()
+					</OnClick>
+				</Scripts>
+			</Button>
+			<Button name="$parentBearUp5" inherits="UIPanelScrollUpButtonTemplate">
+				<Size>
+					<AbsDimension x="15" y="15"/>
+				</Size>
+				<Anchors>
+					<Anchor point="TOPLEFT">
+						<Offset><AbsDimension x="330" y="-170"/></Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						BadKitty_WarnOrder(5,"UP",BadKittyWBFrames)
+						BadKitty_BearWarnOptionsText()
+					</OnClick>
+				</Scripts>
+			</Button>
+			<Button name="$parentBearUp6" inherits="UIPanelScrollUpButtonTemplate">
+				<Size>
+					<AbsDimension x="15" y="15"/>
+				</Size>
+				<Anchors>
+					<Anchor point="TOPLEFT">
+						<Offset><AbsDimension x="330" y="-190"/></Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						BadKitty_WarnOrder(6,"UP",BadKittyWBFrames)
+						BadKitty_BearWarnOptionsText()
+					</OnClick>
+				</Scripts>
+			</Button>
+			<Button name="$parentBearDown1" inherits="UIPanelScrollDownButtonTemplate">
+				<Size>
+					<AbsDimension x="15" y="15"/>
+				</Size>
+				<Anchors>
+					<Anchor point="TOPLEFT">
+						<Offset><AbsDimension x="350" y="-90"/></Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						BadKitty_WarnOrder(1,"DOWN",BadKittyWBFrames)
+						BadKitty_BearWarnOptionsText()
+					</OnClick>
+				</Scripts>
+			</Button>
+			<Button name="$parentBearDown2" inherits="UIPanelScrollDownButtonTemplate">
+				<Size>
+					<AbsDimension x="15" y="15"/>
+				</Size>
+				<Anchors>
+					<Anchor point="TOPLEFT">
+						<Offset><AbsDimension x="350" y="-110"/></Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						BadKitty_WarnOrder(2,"DOWN",BadKittyWBFrames)
+						BadKitty_BearWarnOptionsText()
+					</OnClick>
+				</Scripts>
+			</Button>
+			<Button name="$parentBearDown3" inherits="UIPanelScrollDownButtonTemplate">
+				<Size>
+					<AbsDimension x="15" y="15"/>
+				</Size>
+				<Anchors>
+					<Anchor point="TOPLEFT">
+						<Offset><AbsDimension x="350" y="-130"/></Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						BadKitty_WarnOrder(3,"DOWN",BadKittyWBFrames)
+						BadKitty_BearWarnOptionsText()
+					</OnClick>
+				</Scripts>
+			</Button>
+			<Button name="$parentBearDown4" inherits="UIPanelScrollDownButtonTemplate">
+				<Size>
+					<AbsDimension x="15" y="15"/>
+				</Size>
+				<Anchors>
+					<Anchor point="TOPLEFT">
+						<Offset><AbsDimension x="350" y="-150"/></Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						BadKitty_WarnOrder(4,"DOWN",BadKittyWBFrames)
+						BadKitty_BearWarnOptionsText()
+					</OnClick>
+				</Scripts>
+			</Button>
+			<Button name="$parentBearDown5" inherits="UIPanelScrollDownButtonTemplate">
+				<Size>
+					<AbsDimension x="15" y="15"/>
+				</Size>
+				<Anchors>
+					<Anchor point="TOPLEFT">
+						<Offset><AbsDimension x="350" y="-170"/></Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						BadKitty_WarnOrder(5,"DOWN",BadKittyWBFrames)
+						BadKitty_BearWarnOptionsText()
+					</OnClick>
+				</Scripts>
+			</Button>
+			<CheckButton name="$parentCatRadio1" inherits="SendMailRadioButtonTemplate">
+				<Anchors>
+					<Anchor point="TOPLEFT">
+						<Offset><AbsDimension x="140" y="-90"/></Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						BadKitty_WCatRadioOff()
+						this:SetChecked(1)
+						BadKittyWCatCount=1
+						BadKitty_SetFrames()
+					</OnClick>
+				</Scripts>
+			</CheckButton>
+			<CheckButton name="$parentCatRadio2" inherits="SendMailRadioButtonTemplate">
+				<Anchors>
+					<Anchor point="TOPLEFT">
+						<Offset><AbsDimension x="140" y="-110"/></Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						BadKitty_WCatRadioOff()
+						this:SetChecked(1)
+						BadKittyWCatCount=2
+						BadKitty_SetFrames()
+					</OnClick>
+				</Scripts>
+			</CheckButton>
+			<CheckButton name="$parentCatRadio3" inherits="SendMailRadioButtonTemplate">
+				<Anchors>
+					<Anchor point="TOPLEFT">
+						<Offset><AbsDimension x="140" y="-130"/></Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						BadKitty_WCatRadioOff()
+						this:SetChecked(1)
+						BadKittyWCatCount=3
+						BadKitty_SetFrames()
+					</OnClick>
+				</Scripts>
+			</CheckButton>
+			<CheckButton name="$parentCatRadio4" inherits="SendMailRadioButtonTemplate">
+				<Anchors>
+					<Anchor point="TOPLEFT">
+						<Offset><AbsDimension x="140" y="-150"/></Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						BadKitty_WCatRadioOff()
+						this:SetChecked(1)
+						BadKittyWCatCount=4
+						BadKitty_SetFrames()
+					</OnClick>
+				</Scripts>
+			</CheckButton>
+			<CheckButton name="$parentCatRadio5" inherits="SendMailRadioButtonTemplate">
+				<Anchors>
+					<Anchor point="TOPLEFT">
+						<Offset><AbsDimension x="140" y="-170"/></Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						BadKitty_WCatRadioOff()
+						this:SetChecked(1)
+						BadKittyWCatCount=5
+						BadKitty_SetFrames()
+					</OnClick>
+				</Scripts>
+			</CheckButton>
+			<CheckButton name="$parentCatRadio6" inherits="SendMailRadioButtonTemplate">
+				<Anchors>
+					<Anchor point="TOPLEFT">
+						<Offset><AbsDimension x="140" y="-190"/></Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						BadKitty_WCatRadioOff()
+						this:SetChecked(1)
+						BadKittyWCatCount=6
+						BadKitty_SetFrames()
+					</OnClick>
+				</Scripts>
+			</CheckButton>
+			<CheckButton name="$parentCatRadio7" inherits="SendMailRadioButtonTemplate">
+				<Anchors>
+					<Anchor point="TOPLEFT">
+						<Offset><AbsDimension x="140" y="-210"/></Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						BadKitty_WCatRadioOff()
+						this:SetChecked(1)
+						BadKittyWCatCount=7
+						BadKitty_SetFrames()
+					</OnClick>
+				</Scripts>
+			</CheckButton>
+			<CheckButton name="$parentCatRadio8" inherits="SendMailRadioButtonTemplate">
+				<Anchors>
+					<Anchor point="TOPLEFT">
+						<Offset><AbsDimension x="140" y="-230"/></Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						BadKitty_WCatRadioOff()
+						this:SetChecked(1)
+						BadKittyWCatCount=8
+						BadKitty_SetFrames()
+					</OnClick>
+				</Scripts>
+			</CheckButton>
+			<CheckButton name="$parentCatRadio9" inherits="SendMailRadioButtonTemplate">
+				<Anchors>
+					<Anchor point="TOPLEFT">
+						<Offset><AbsDimension x="140" y="-250"/></Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						BadKitty_WCatRadioOff()
+						this:SetChecked(1)
+						BadKittyWCatCount=9
+						BadKitty_SetFrames()
+					</OnClick>
+				</Scripts>
+			</CheckButton>
+			<CheckButton name="$parentCatRadio10" inherits="SendMailRadioButtonTemplate">
+				<Anchors>
+					<Anchor point="TOPLEFT">
+						<Offset><AbsDimension x="140" y="-270"/></Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						BadKitty_WCatRadioOff()
+						this:SetChecked(1)
+						BadKittyWCatCount=10
+						BadKitty_SetFrames()
+					</OnClick>
+				</Scripts>
+			</CheckButton>
+			<CheckButton name="$parentCatRadio11" inherits="SendMailRadioButtonTemplate">
+				<Anchors>
+					<Anchor point="TOPLEFT">
+						<Offset><AbsDimension x="140" y="-290"/></Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						BadKitty_WCatRadioOff()
+						this:SetChecked(1)
+						BadKittyWCatCount=11
+						BadKitty_SetFrames()
+					</OnClick>
+				</Scripts>
+			</CheckButton>
+			<CheckButton name="$parentCatRadio12" inherits="SendMailRadioButtonTemplate">
+				<Anchors>
+					<Anchor point="TOPLEFT">
+						<Offset><AbsDimension x="140" y="-310"/></Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						BadKitty_WCatRadioOff()
+						this:SetChecked(1)
+						BadKittyWCatCount=12
+						BadKitty_SetFrames()
+					</OnClick>
+				</Scripts>
+			</CheckButton>
+			<CheckButton name="$parentCatRadio13" inherits="SendMailRadioButtonTemplate">
+				<Anchors>
+					<Anchor point="TOPLEFT">
+						<Offset><AbsDimension x="140" y="-330"/></Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						BadKitty_WCatRadioOff()
+						this:SetChecked(1)
+						BadKittyWCatCount=13
+						BadKitty_SetFrames()
+					</OnClick>
+				</Scripts>
+			</CheckButton>
+			<CheckButton name="$parentBearRadio1" inherits="SendMailRadioButtonTemplate">
+				<Anchors>
+					<Anchor point="TOPLEFT">
+						<Offset><AbsDimension x="370" y="-90"/></Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						BadKitty_WBearRadioOff()
+						this:SetChecked(1)
+						BadKittyWBearCount=1
+						BadKitty_SetFrames()
+					</OnClick>
+				</Scripts>
+			</CheckButton>
+			<CheckButton name="$parentBearRadio2" inherits="SendMailRadioButtonTemplate">
+				<Anchors>
+					<Anchor point="TOPLEFT">
+						<Offset><AbsDimension x="370" y="-110"/></Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						BadKitty_WBearRadioOff()
+						this:SetChecked(1)
+						BadKittyWBearCount=2
+						BadKitty_SetFrames()
+					</OnClick>
+				</Scripts>
+			</CheckButton>
+			<CheckButton name="$parentBearRadio3" inherits="SendMailRadioButtonTemplate">
+				<Anchors>
+					<Anchor point="TOPLEFT">
+						<Offset><AbsDimension x="370" y="-130"/></Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						BadKitty_WBearRadioOff()
+						this:SetChecked(1)
+						BadKittyWBearCount=3
+						BadKitty_SetFrames()
+					</OnClick>
+				</Scripts>
+			</CheckButton>
+			<CheckButton name="$parentBearRadio4" inherits="SendMailRadioButtonTemplate">
+				<Anchors>
+					<Anchor point="TOPLEFT">
+						<Offset><AbsDimension x="370" y="-150"/></Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						BadKitty_WBearRadioOff()
+						this:SetChecked(1)
+						BadKittyWBearCount=4
+						BadKitty_SetFrames()
+					</OnClick>
+				</Scripts>
+			</CheckButton>
+			<CheckButton name="$parentBearRadio5" inherits="SendMailRadioButtonTemplate">
+				<Anchors>
+					<Anchor point="TOPLEFT">
+						<Offset><AbsDimension x="370" y="-170"/></Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						BadKitty_WBearRadioOff()
+						this:SetChecked(1)
+						BadKittyWBearCount=5
+						BadKitty_SetFrames()
+					</OnClick>
+				</Scripts>
+			</CheckButton>
+			<CheckButton name="$parentBearRadio6" inherits="SendMailRadioButtonTemplate">
+				<Anchors>
+					<Anchor point="TOPLEFT">
+						<Offset><AbsDimension x="370" y="-190"/></Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						BadKitty_WBearRadioOff()
+						this:SetChecked(1)
+						BadKittyWBearCount=6
+						BadKitty_SetFrames()
+					</OnClick>
+				</Scripts>
+			</CheckButton>
+			
+			<Slider name="$parentCatShape" orientation="HORIZONTAL" minValue="1" maxValue="13" valueStep="1">
+				<Size>
+					<AbsDimension x="128" y="16"/>
+				</Size>
+				<Anchors>
+					<Anchor point="TOPLEFT">
+						<Offset>
+							<AbsDimension x="250" y="-355"/>
+						</Offset>
+					</Anchor>
+				</Anchors>
+				<Backdrop bgFile="Interface\Buttons\UI-SliderBar-Background" edgeFile="Interface\Buttons\UI-SliderBar-Border" tile="true">
+					<EdgeSize>
+						<AbsValue val="8"/>
+					</EdgeSize>
+					<TileSize>
+						<AbsValue val="8"/>
+					</TileSize>
+					<BackgroundInsets>
+						<AbsInset left="3" right="3" top="6" bottom="6"/>
+					</BackgroundInsets>
+				</Backdrop>
+				<ThumbTexture file="Interface\Buttons\UI-SliderBar-Button-Horizontal">
+					<Size>
+						<AbsDimension x="32" y="32"/>
+					</Size>
+				</ThumbTexture>
+				<Layers>
+					<Layer level="ARTWORK">
+						<FontString name="$parentText" inherits="GameFontNormalSmall" text="# of Columns/Rows">
+							<Anchors>
+								<Anchor point="CENTER" relativeto="BadKittyWarnOptionsCatShape">
+									<Offset>
+										<AbsDimension x="0" y="15"/>
+									</Offset>
+								</Anchor>
+							</Anchors>
+						</FontString>
+						<FontString name="$parentDisplay" inherits="GameFontNormalSmall">
+							<Anchors>
+								<Anchor point="RIGHT" relativeto="BadKittyWarnOptionsCatShape">
+									<Offset>
+										<AbsDimension x="20" y="0"/>
+									</Offset>
+								</Anchor>
+							</Anchors>
+						</FontString>
+					</Layer>
+				</Layers>
+				<Scripts>
+					<OnShow>
+						this:SetValue(BadKittySaves[14][1])
+						BadKittyWarnOptionsCatShapeDisplay:SetText(tostring(BadKittySaves[14][1]))
+					</OnShow>
+					<OnValueChanged>
+						BadKittySaves[14][1]=this:GetValue()
+						BadKittyWarnOptionsCatShapeDisplay:SetText(tostring(BadKittySaves[14][1]))
+						BadKitty_CatWarningShape(BadKittySaves[14])
+					</OnValueChanged>
+				</Scripts>
+			</Slider>
+			
+			<Slider name="$parentBearShape" orientation="HORIZONTAL" minValue="1" maxValue="6" valueStep="1">
+				<Size>
+					<AbsDimension x="128" y="16"/>
+				</Size>
+				<Anchors>
+					<Anchor point="TOPLEFT">
+						<Offset>
+							<AbsDimension x="250" y="-255"/>
+						</Offset>
+					</Anchor>
+				</Anchors>
+				<Backdrop bgFile="Interface\Buttons\UI-SliderBar-Background" edgeFile="Interface\Buttons\UI-SliderBar-Border" tile="true">
+					<EdgeSize>
+						<AbsValue val="8"/>
+					</EdgeSize>
+					<TileSize>
+						<AbsValue val="8"/>
+					</TileSize>
+					<BackgroundInsets>
+						<AbsInset left="3" right="3" top="6" bottom="6"/>
+					</BackgroundInsets>
+				</Backdrop>
+				<ThumbTexture file="Interface\Buttons\UI-SliderBar-Button-Horizontal">
+					<Size>
+						<AbsDimension x="32" y="32"/>
+					</Size>
+				</ThumbTexture>
+				<Layers>
+					<Layer level="ARTWORK">
+						<FontString name="$parentText" inherits="GameFontNormalSmall" text="# of Columns/Rows">
+							<Anchors>
+								<Anchor point="CENTER" relativeto="BadKittyWarnOptionsBearShape">
+									<Offset>
+										<AbsDimension x="0" y="15"/>
+									</Offset>
+								</Anchor>
+							</Anchors>
+						</FontString>
+						<FontString name="$parentDisplay" inherits="GameFontNormalSmall">
+							<Anchors>
+								<Anchor point="RIGHT" relativeto="BadKittyWarnOptionsBearShape">
+									<Offset>
+										<AbsDimension x="20" y="0"/>
+									</Offset>
+								</Anchor>
+							</Anchors>
+						</FontString>
+					</Layer>
+				</Layers>
+				<Scripts>
+					<OnShow>
+						this:SetValue(BadKittySaves[15][1])
+						BadKittyWarnOptionsBearShapeDisplay:SetText(tostring(BadKittySaves[15][1]))
+					</OnShow>
+					<OnValueChanged>
+						BadKittySaves[15][1]=this:GetValue()
+						BadKittyWarnOptionsBearShapeDisplay:SetText(tostring(BadKittySaves[15][1]))
+						BadKitty_BearWarningShape(BadKittySaves[15])
+					</OnValueChanged>
+				</Scripts>
+			</Slider>
+			<CheckButton name="$parentBearColumns" inherits="SendMailRadioButtonTemplate">
+				<Anchors>
+					<Anchor point="TOPLEFT">
+						<Offset><AbsDimension x="250" y="-270"/></Offset>
+					</Anchor>
+				</Anchors>
+				<Layers>
+					<Layer level="ARTWORK">
+						<FontString name="$parentText" inherits="GameFontNormalSmall" text="columns">
+							<Anchors>
+								<Anchor point="CENTER" relativeto="BadKittyWarnOptionsBearColumns">
+									<Offset>
+										<AbsDimension x="35" y="0"/>
+									</Offset>
+								</Anchor>
+							</Anchors>
+						</FontString>
+					</Layer>
+				</Layers>
+				<Scripts>
+					<OnClick>
+						BadKittyWarnOptionsBearRows:SetChecked(0)
+						this:SetChecked(1)
+						BadKittySaves[15][2]="c"
+						BadKitty_BearWarningShape(BadKittySaves[15])
+					</OnClick>
+				</Scripts>
+			</CheckButton>
+			<CheckButton name="$parentBearRows" inherits="SendMailRadioButtonTemplate">
+				<Anchors>
+					<Anchor point="TOPLEFT">
+						<Offset><AbsDimension x="340" y="-270"/></Offset>
+					</Anchor>
+				</Anchors>
+				<Layers>
+					<Layer level="ARTWORK">
+						<FontString name="$parentText" inherits="GameFontNormalSmall" text="rows">
+							<Anchors>
+								<Anchor point="CENTER" relativeto="BadKittyWarnOptionsBearRows">
+									<Offset>
+										<AbsDimension x="25" y="0"/>
+									</Offset>
+								</Anchor>
+							</Anchors>
+						</FontString>
+					</Layer>
+				</Layers>
+				<Scripts>
+					<OnClick>
+						BadKittyWarnOptionsBearColumns:SetChecked(0)
+						this:SetChecked(1)
+						BadKittySaves[15][2]="r"
+						BadKitty_BearWarningShape(BadKittySaves[15])
+					</OnClick>
+				</Scripts>
+			</CheckButton>
+			<CheckButton name="$parentCatColumns" inherits="SendMailRadioButtonTemplate">
+				<Anchors>
+					<Anchor point="TOPLEFT">
+						<Offset><AbsDimension x="250" y="-370"/></Offset>
+					</Anchor>
+				</Anchors>
+				<Layers>
+					<Layer level="ARTWORK">
+						<FontString name="$parentText" inherits="GameFontNormalSmall" text="columns">
+							<Anchors>
+								<Anchor point="CENTER" relativeto="BadKittyWarnOptionsCatColumns">
+									<Offset>
+										<AbsDimension x="35" y="0"/>
+									</Offset>
+								</Anchor>
+							</Anchors>
+						</FontString>
+					</Layer>
+				</Layers>
+				<Scripts>
+					<OnClick>
+						BadKittyWarnOptionsCatRows:SetChecked(0)
+						this:SetChecked(1)
+						BadKittySaves[14][2]="c"
+						BadKitty_CatWarningShape(BadKittySaves[14])
+					</OnClick>
+				</Scripts>
+			</CheckButton>
+			<CheckButton name="$parentCatRows" inherits="SendMailRadioButtonTemplate">
+				<Anchors>
+					<Anchor point="TOPLEFT">
+						<Offset><AbsDimension x="340" y="-370"/></Offset>
+					</Anchor>
+				</Anchors>
+				<Layers>
+					<Layer level="ARTWORK">
+						<FontString name="$parentText" inherits="GameFontNormalSmall" text="rows">
+							<Anchors>
+								<Anchor point="CENTER" relativeto="BadKittyWarnOptionsCatRows">
+									<Offset>
+										<AbsDimension x="25" y="0"/>
+									</Offset>
+								</Anchor>
+							</Anchors>
+						</FontString>
+					</Layer>
+				</Layers>
+				<Scripts>
+					<OnClick>
+						BadKittyWarnOptionsCatColumns:SetChecked(0)
+						this:SetChecked(1)
+						BadKittySaves[14][2]="r"
+						BadKitty_CatWarningShape(BadKittySaves[14])
+					</OnClick>
+				</Scripts>
+			</CheckButton>
+		</Frames>
+	</Frame>
+</Ui>

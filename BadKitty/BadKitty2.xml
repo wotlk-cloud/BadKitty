@@ -1,0 +1,1540 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+    xsi:schemaLocation="http://www.blizzard.com/wow/ui/
+    ..\FrameXML\UI.xsd">
+	<Script file="BadKitty.lua"/>
+	<!--
+	
+			Cat Bars
+		
+		
+	-->
+	<Frame name="BadKittyFrame" movable="true" toplevel="true" parent="UIParent">
+
+		<Size>
+		<AbsDimension x="100" y="100" />
+		</Size>
+	
+		<Anchors>
+			<Anchor point ="CENTER"/>
+		</Anchors>
+	
+		<Layers>
+			<Layer level="BACKGROUND">
+				<Texture name="$parent_Background" setAllPoints="true">
+					<Color r=".1" g=".1" b=".1" a="0.5" /> 
+				</Texture>
+			</Layer>
+		</Layers> 
+	
+		<Scripts>
+	
+			<OnLoad>
+				BadKitty_OnLoad();
+			</OnLoad>
+	
+			<OnEvent>
+				BadKitty_OnEvent(self, event, ...);
+			</OnEvent>
+			<OnUpdate>
+				BadKitty_UpdateMe()
+			</OnUpdate>
+			<OnMouseDown>
+				BKMove()
+			</OnMouseDown>
+			<OnMouseUp>
+				this:StopMovingOrSizing()
+			</OnMouseUp>
+			<OnDragStop>
+				this:StopMovingOrSizing()
+			</OnDragStop>
+		
+		</Scripts>
+		
+		<Frames>
+		<Statusbar name="BKvirtualbar" virtual="true" inherits="TestStatusBar">
+			<Scripts>
+				<OnMouseDown>
+					BKMove()
+				</OnMouseDown>
+				<OnMouseUp>
+					BadKittyFrame:StopMovingOrSizing()
+					this:StopMovingOrSizing()
+				</OnMouseUp>
+				<OnDragStop>
+					BadKittyFrame:StopMovingOrSizing()
+					this:StopMovingOrSizing()
+				</OnDragStop>
+			</Scripts>
+		</Statusbar>
+		<Statusbar name="$parentBar1" toplevel="false" inherits="BKvirtualbar">
+			<Size x="100" y="15"/>
+			<Layers>
+				<Layer level="OVERLAY">
+					<FontString name="$parentText" justifyH="LEFT" inherits="GameFontNormal" />
+					<FontString name="$parentSecs" justifyH="RIGHT" inherits="GameFontNormal" />
+				</Layer>
+			</Layers>
+			<Anchors>
+				<Anchor point="TOP" relativepoint="TOP">
+					<Offset>
+						<AbsDimension x="0" y="0" />
+					</Offset>
+				</Anchor>
+			</Anchors>
+			<BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
+			<Scripts>
+				<OnLoad>
+					this:SetMinMaxValues(0,40)
+				</OnLoad>
+				</Scripts>
+		</Statusbar>
+		
+		<Statusbar name="$parentBar2" toplevel="false" inherits="BKvirtualbar">
+			<Size x="100" y="15"/>
+			<Layers>
+				<Layer level="OVERLAY">
+					<FontString name="$parentText" justifyH="LEFT" inherits="GameFontNormal" />
+					<FontString name="$parentSecs" justifyH="RIGHT" inherits="GameFontNormal" />
+				</Layer>
+			</Layers>
+			<Anchors>
+				<Anchor point="TOP" relativepoint="TOP">
+					<Offset>
+						<AbsDimension x="0" y="-15" />
+					</Offset>
+				</Anchor>
+			</Anchors>
+			<BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
+			<Scripts>
+				<OnLoad>
+					this:SetMinMaxValues(0,40)
+				</OnLoad>
+				<OnUpdate>
+				</OnUpdate>
+			</Scripts>
+		</Statusbar>
+		
+		<Statusbar name="$parentBar3" toplevel="false" inherits="BKvirtualbar">
+			<Size x="100" y="15"/>
+			<Layers>
+				<Layer level="OVERLAY">
+					<FontString name="$parentText" justifyH="LEFT" inherits="GameFontNormal" />
+					<FontString name="$parentSecs" justifyH="RIGHT" inherits="GameFontNormal" />
+				</Layer>
+			</Layers>
+			<Anchors>
+				<Anchor point="TOP" relativepoint="TOP">
+					<Offset>
+						<AbsDimension x="0" y="-30" />
+					</Offset>
+				</Anchor>
+			</Anchors>
+			<BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
+			<Scripts>
+				<OnLoad>
+					this:SetMinMaxValues(0,40)
+				</OnLoad>
+			</Scripts>
+		</Statusbar>
+		
+		<Statusbar name="$parentBar4" toplevel="false" inherits="BKvirtualbar">
+			<Size x="100" y="15"/>
+			<Layers>
+				<Layer level="OVERLAY">
+					<FontString name="$parentText" justifyH="LEFT" inherits="GameFontNormal" />
+					<FontString name="$parentSecs" justifyH="RIGHT" inherits="GameFontNormal" />
+				</Layer>
+			</Layers>
+			<Anchors>
+				<Anchor point="TOP" relativepoint="TOP">
+					<Offset>
+						<AbsDimension x="0" y="-45" />
+					</Offset>
+				</Anchor>
+			</Anchors>
+			<BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
+			<Scripts>
+				<OnLoad>
+					this:SetMinMaxValues(0,40)
+				</OnLoad>
+			</Scripts>
+		</Statusbar>
+
+		<Statusbar name="$parentBar5" toplevel="false" inherits="BKvirtualbar">
+			<Size x="100" y="15"/>
+			<Layers>
+				<Layer level="OVERLAY">
+					<FontString name="$parentText" justifyH="LEFT" inherits="GameFontNormal" />
+					<FontString name="$parentSecs" justifyH="RIGHT" inherits="GameFontNormal" />
+				</Layer>
+			</Layers>
+			<Anchors>
+				<Anchor point="TOP" relativepoint="TOP">
+					<Offset>
+						<AbsDimension x="0" y="-60" />
+					</Offset>
+				</Anchor>
+			</Anchors>
+			<BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
+			<Scripts>
+				<OnLoad>
+					this:SetMinMaxValues(0,40)
+				</OnLoad>
+				<OnUpdate>
+				</OnUpdate>
+			</Scripts>
+		</Statusbar>
+		
+		<Statusbar name="$parentBar6" toplevel="false" inherits="BKvirtualbar">
+			<Size x="100" y="15"/>
+			<Layers>
+				<Layer level="OVERLAY">
+					<FontString name="$parentText" justifyH="LEFT" inherits="GameFontNormal" />
+					<FontString name="$parentSecs" justifyH="RIGHT" inherits="GameFontNormal" />
+				</Layer>
+			</Layers>
+			<Anchors>
+				<Anchor point="TOP" relativepoint="TOP">
+					<Offset>
+						<AbsDimension x="0" y="-75" />
+					</Offset>
+				</Anchor>
+			</Anchors>
+			<BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
+			<Scripts>
+				<OnLoad>
+					this:SetMinMaxValues(0,40)
+				</OnLoad>
+			</Scripts>
+		</Statusbar>
+		<Statusbar name="$parentBar7" toplevel="false" inherits="BKvirtualbar">
+			<Size x="100" y="15"/>
+			<Layers>
+				<Layer level="OVERLAY">
+					<FontString name="$parentText" justifyH="LEFT" inherits="GameFontNormal" />
+					<FontString name="$parentSecs" justifyH="RIGHT" inherits="GameFontNormal" />
+				</Layer>
+			</Layers>
+			<Anchors>
+				<Anchor point="TOP" relativepoint="TOP">
+					<Offset>
+						<AbsDimension x="0" y="-90" />
+					</Offset>
+				</Anchor>
+			</Anchors>
+			<BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
+			<Scripts>
+				<OnLoad>
+					this:SetMinMaxValues(0,40)
+				</OnLoad>
+			</Scripts>
+		</Statusbar>
+		<Statusbar name="$parentBar8" toplevel="false" inherits="BKvirtualbar">
+			<Size x="100" y="15"/>
+			<Layers>
+				<Layer level="OVERLAY">
+					<FontString name="$parentText" justifyH="LEFT" inherits="GameFontNormal" />
+					<FontString name="$parentSecs" justifyH="RIGHT" inherits="GameFontNormal" />
+				</Layer>
+			</Layers>
+			<Anchors>
+				<Anchor point="TOP" relativepoint="TOP">
+					<Offset>
+						<AbsDimension x="0" y="-105" />
+					</Offset>
+				</Anchor>
+			</Anchors>
+			<BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
+			<Scripts>
+				<OnLoad>
+					this:SetMinMaxValues(0,40)
+				</OnLoad>
+			</Scripts>
+		</Statusbar>
+		<Statusbar name="$parentBar9" toplevel="false" inherits="BKvirtualbar">
+			<Size x="100" y="15"/>
+			<Layers>
+				<Layer level="OVERLAY">
+					<FontString name="$parentText" justifyH="LEFT" inherits="GameFontNormal" />
+					<FontString name="$parentSecs" justifyH="RIGHT" inherits="GameFontNormal" />
+				</Layer>
+			</Layers>
+			<Anchors>
+				<Anchor point="TOP" relativepoint="TOP">
+					<Offset>
+						<AbsDimension x="0" y="-120" />
+					</Offset>
+				</Anchor>
+			</Anchors>
+			<BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
+			<Scripts>
+				<OnLoad>
+					this:SetMinMaxValues(0,40)
+				</OnLoad>
+			</Scripts>
+		</Statusbar>
+		<Statusbar name="$parentBar10" toplevel="false" inherits="BKvirtualbar">
+			<Size x="100" y="15"/>
+			<Layers>
+				<Layer level="OVERLAY">
+					<FontString name="$parentText" justifyH="LEFT" inherits="GameFontNormal" />
+					<FontString name="$parentSecs" justifyH="RIGHT" inherits="GameFontNormal" />
+				</Layer>
+			</Layers>
+			<Anchors>
+				<Anchor point="TOP" relativepoint="TOP">
+					<Offset>
+						<AbsDimension x="0" y="-135" />
+					</Offset>
+				</Anchor>
+			</Anchors>
+			<BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
+			<Scripts>
+				<OnLoad>
+					this:SetMinMaxValues(0,40)
+				</OnLoad>
+			</Scripts>
+		</Statusbar>
+		<Statusbar name="$parentBar11" toplevel="false" inherits="BKvirtualbar">
+			<Size x="100" y="15"/>
+			<Layers>
+				<Layer level="OVERLAY">
+					<FontString name="$parentText" justifyH="LEFT" inherits="GameFontNormal" />
+					<FontString name="$parentSecs" justifyH="RIGHT" inherits="GameFontNormal" />
+				</Layer>
+			</Layers>
+			<Anchors>
+				<Anchor point="TOP" relativepoint="TOP">
+					<Offset>
+						<AbsDimension x="0" y="-150" />
+					</Offset>
+				</Anchor>
+			</Anchors>
+			<BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
+			<Scripts>
+				<OnLoad>
+					this:SetMinMaxValues(0,40)
+				</OnLoad>
+			</Scripts>
+		</Statusbar>
+		<Statusbar name="$parentBar12" toplevel="false" inherits="BKvirtualbar">
+			<Size x="100" y="15"/>
+			<Layers>
+				<Layer level="OVERLAY">
+					<FontString name="$parentText" justifyH="LEFT" inherits="GameFontNormal" />
+					<FontString name="$parentSecs" justifyH="RIGHT" inherits="GameFontNormal" />
+				</Layer>
+			</Layers>
+			<Anchors>
+				<Anchor point="TOP" relativepoint="TOP">
+					<Offset>
+						<AbsDimension x="0" y="-165" />
+					</Offset>
+				</Anchor>
+			</Anchors>
+			<BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
+			<Scripts>
+				<OnLoad>
+					this:SetMinMaxValues(0,40)
+				</OnLoad>
+			</Scripts>
+		</Statusbar>
+		<Statusbar name="$parentBar13" toplevel="false" inherits="BKvirtualbar">
+			<Size x="100" y="15"/>
+			<Layers>
+				<Layer level="OVERLAY">
+					<FontString name="$parentText" justifyH="LEFT" inherits="GameFontNormal" />
+					<FontString name="$parentSecs" justifyH="RIGHT" inherits="GameFontNormal" />
+				</Layer>
+			</Layers>
+			<Anchors>
+				<Anchor point="TOP" relativepoint="TOP">
+					<Offset>
+						<AbsDimension x="0" y="-180" />
+					</Offset>
+				</Anchor>
+			</Anchors>
+			<BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
+			<Scripts>
+				<OnLoad>
+					this:SetMinMaxValues(0,40)
+				</OnLoad>
+			</Scripts>
+		</Statusbar>
+		<Statusbar name="$parentBar14" toplevel="false" inherits="BKvirtualbar">
+			<Size x="100" y="15"/>
+			<Layers>
+				<Layer level="OVERLAY">
+					<FontString name="$parentText" justifyH="LEFT" inherits="GameFontNormal" />
+					<FontString name="$parentSecs" justifyH="RIGHT" inherits="GameFontNormal" />
+				</Layer>
+			</Layers>
+			<Anchors>
+				<Anchor point="TOP" relativepoint="TOP">
+					<Offset>
+						<AbsDimension x="0" y="-195" />
+					</Offset>
+				</Anchor>
+			</Anchors>
+			<BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
+			<Scripts>
+				<OnLoad>
+					this:SetMinMaxValues(0,40)
+				</OnLoad>
+			</Scripts>
+		</Statusbar>
+		<Statusbar name="$parentBar15" toplevel="false" inherits="BKvirtualbar">
+			<Size x="100" y="15"/>
+			<Layers>
+				<Layer level="OVERLAY">
+					<FontString name="$parentText" justifyH="LEFT" inherits="GameFontNormal" />
+					<FontString name="$parentSecs" justifyH="RIGHT" inherits="GameFontNormal" />
+				</Layer>
+			</Layers>
+			<Anchors>
+				<Anchor point="TOP" relativepoint="TOP">
+					<Offset>
+						<AbsDimension x="0" y="-210" />
+					</Offset>
+				</Anchor>
+			</Anchors>
+			<BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
+			<Scripts>
+				<OnLoad>
+					this:SetMinMaxValues(0,40)
+				</OnLoad>
+			</Scripts>
+		</Statusbar>
+		<!--Bar0 is a placeholder, a sink if you will.  It does nothing.-->
+		<Statusbar name="$parentBar0" toplevel="false" inherits="BKvirtualbar">
+			<Size x="100" y="15"/>
+			<Layers>
+				<Layer level="OVERLAY">
+					<FontString name="$parentText" justifyH="LEFT" inherits="GameFontNormal" />
+					<FontString name="$parentSecs" justifyH="RIGHT" inherits="GameFontNormal" />
+				</Layer>
+			</Layers>
+			<Anchors>
+				<Anchor point="TOP" relativepoint="TOP">
+					<Offset>
+						<AbsDimension x="0" y="0" />
+					</Offset>
+				</Anchor>
+			</Anchors>
+			<BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
+			<BarColor r="0" g="1" b="0" a="1" />
+			<Scripts>
+				<OnLoad>
+					this:SetMinMaxValues(0,40)
+				</OnLoad>
+			</Scripts>
+		</Statusbar>
+		<Frame name="BKOOCFrame" toplevel="true" parent="UIParent">
+			<Size>
+				<AbsDimension x="100" y="100" />
+			</Size>
+			<Anchors>
+				<Anchor point ="TOPLEFT" relativeTo="BadKittyFrame" relativepoint="TOPLEFT"/>
+			</Anchors>
+				<Backdrop bgFile="Interface/Icons/Spell_Shadow_ManaBurn" tile="false">
+				</Backdrop>
+		</Frame>
+		<Frame name="BadKittyCatIcon1">
+			<Size>
+				<AbsDimension x="15" y="15" />
+			</Size>
+			<Backdrop bgFile="Interface/Icons/Spell_Shadow_ManaBurn" tile="false">
+			</Backdrop>
+			<Anchors>
+				<Anchor point="TOPRIGHT" relativepoint="TOPLEFT" relativeTo="BadKittyFrameBar1"/>
+			</Anchors>
+		</Frame>
+		<Frame name="BadKittyCatIcon2">
+			<Size>
+				<AbsDimension x="15" y="15" />
+			</Size>
+			<Backdrop bgFile="Interface/Icons/Spell_Shadow_ManaBurn" tile="false">
+			</Backdrop>
+			<Anchors>
+				<Anchor point="TOPRIGHT" relativepoint="TOPLEFT" relativeTo="BadKittyFrameBar2"/>
+			</Anchors>
+		</Frame>
+		<Frame name="BadKittyCatIcon3">
+			<Size>
+				<AbsDimension x="15" y="15" />
+			</Size>
+			<Backdrop bgFile="Interface/Icons/Spell_Shadow_ManaBurn" tile="false">
+			</Backdrop>
+			<Anchors>
+				<Anchor point="TOPRIGHT" relativepoint="TOPLEFT" relativeTo="BadKittyFrameBar3"/>
+			</Anchors>
+		</Frame>
+		<Frame name="BadKittyCatIcon4">
+			<Size>
+				<AbsDimension x="15" y="15" />
+			</Size>
+			<Backdrop bgFile="Interface/Icons/Spell_Shadow_ManaBurn" tile="false">
+			</Backdrop>
+			<Anchors>
+				<Anchor point="TOPRIGHT" relativepoint="TOPLEFT" relativeTo="BadKittyFrameBar4"/>
+			</Anchors>
+		</Frame>
+		<Frame name="BadKittyCatIcon5">
+			<Size>
+				<AbsDimension x="15" y="15" />
+			</Size>
+			<Backdrop bgFile="Interface/Icons/Spell_Shadow_ManaBurn" tile="false">
+			</Backdrop>
+			<Anchors>
+				<Anchor point="TOPRIGHT" relativepoint="TOPLEFT" relativeTo="BadKittyFrameBar5"/>
+			</Anchors>
+		</Frame>
+		<Frame name="BadKittyCatIcon6">
+			<Size>
+				<AbsDimension x="15" y="15" />
+			</Size>
+			<Backdrop bgFile="Interface/Icons/Spell_Shadow_ManaBurn" tile="false">
+			</Backdrop>
+			<Anchors>
+				<Anchor point="TOPRIGHT" relativepoint="TOPLEFT" relativeTo="BadKittyFrameBar6"/>
+			</Anchors>
+		</Frame>
+		<Frame name="BadKittyCatIcon7">
+			<Size>
+				<AbsDimension x="15" y="15" />
+			</Size>
+			<Backdrop bgFile="Interface/Icons/Spell_Shadow_ManaBurn" tile="false">
+			</Backdrop>
+			<Anchors>
+				<Anchor point="TOPRIGHT" relativepoint="TOPLEFT" relativeTo="BadKittyFrameBar7"/>
+			</Anchors>
+		</Frame>
+		<Frame name="BadKittyCatIcon8">
+			<Size>
+				<AbsDimension x="15" y="15" />
+			</Size>
+			<Backdrop bgFile="Interface/Icons/Spell_Shadow_ManaBurn" tile="false">
+			</Backdrop>
+			<Anchors>
+				<Anchor point="TOPRIGHT" relativepoint="TOPLEFT" relativeTo="BadKittyFrameBar8"/>
+			</Anchors>
+		</Frame>
+		<Frame name="BadKittyCatIcon9">
+			<Size>
+				<AbsDimension x="15" y="15" />
+			</Size>
+			<Backdrop bgFile="Interface/Icons/Spell_Shadow_ManaBurn" tile="false">
+			</Backdrop>
+			<Anchors>
+				<Anchor point="TOPRIGHT" relativepoint="TOPLEFT" relativeTo="BadKittyFrameBar9"/>
+			</Anchors>
+		</Frame>
+		<Frame name="BadKittyCatIcon10">
+			<Size>
+				<AbsDimension x="15" y="15" />
+			</Size>
+			<Backdrop bgFile="Interface/Icons/Spell_Shadow_ManaBurn" tile="false">
+			</Backdrop>
+			<Anchors>
+				<Anchor point="TOPRIGHT" relativepoint="TOPLEFT" relativeTo="BadKittyFrameBar10"/>
+			</Anchors>
+		</Frame>
+		<Frame name="BadKittyCatIcon11">
+			<Size>
+				<AbsDimension x="15" y="15" />
+			</Size>
+			<Backdrop bgFile="Interface/Icons/Spell_Shadow_ManaBurn" tile="false">
+			</Backdrop>
+			<Anchors>
+				<Anchor point="TOPRIGHT" relativepoint="TOPLEFT" relativeTo="BadKittyFrameBar11"/>
+			</Anchors>
+		</Frame>
+		<Frame name="BadKittyCatIcon12">
+			<Size>
+				<AbsDimension x="15" y="15" />
+			</Size>
+			<Backdrop bgFile="Interface/Icons/Spell_Shadow_ManaBurn" tile="false">
+			</Backdrop>
+			<Anchors>
+				<Anchor point="TOPRIGHT" relativepoint="TOPLEFT" relativeTo="BadKittyFrameBar12"/>
+			</Anchors>
+		</Frame>
+		<Frame name="BadKittyCatIcon13">
+			<Size>
+				<AbsDimension x="15" y="15" />
+			</Size>
+			<Backdrop bgFile="Interface/Icons/Spell_Shadow_ManaBurn" tile="false">
+			</Backdrop>
+			<Anchors>
+				<Anchor point="TOPRIGHT" relativepoint="TOPLEFT" relativeTo="BadKittyFrameBar13"/>
+			</Anchors>
+		</Frame>
+		<Frame name="BadKittyCatIcon14">
+			<Size>
+				<AbsDimension x="15" y="15" />
+			</Size>
+			<Backdrop bgFile="Interface/Icons/Spell_Shadow_ManaBurn" tile="false">
+			</Backdrop>
+			<Anchors>
+				<Anchor point="TOPRIGHT" relativepoint="TOPLEFT" relativeTo="BadKittyFrameBar14"/>
+			</Anchors>
+		</Frame>
+		<Frame name="BadKittyCatIcon15">
+			<Size>
+				<AbsDimension x="15" y="15" />
+			</Size>
+			<Backdrop bgFile="Interface/Icons/Spell_Shadow_ManaBurn" tile="false">
+			</Backdrop>
+			<Anchors>
+				<Anchor point="TOPRIGHT" relativepoint="TOPLEFT" relativeTo="BadKittyFrameBar15"/>
+			</Anchors>
+		</Frame>
+		<Frame name="BadKittyCatIcon0">
+			<Size>
+				<AbsDimension x="15" y="15" />
+			</Size>
+			<Backdrop bgFile="Interface/Icons/Spell_Shadow_ManaBurn" tile="false">
+			</Backdrop>
+			<Anchors>
+				<Anchor point="TOPRIGHT" relativepoint="TOPLEFT" relativeTo="BadKittyFrameBar0"/>
+			</Anchors>
+		</Frame>
+		</Frames>
+	</Frame>
+	
+	
+	<!--
+	
+			Cat Warnings
+		
+		
+	-->
+	
+	<Frame name="BadKittyWarnings" movable="true" parent="UIParent" toplevel="true">
+		<Size>
+			<AbsDimension x="150" y="150" />
+		</Size>
+		
+		<Anchors>
+			<Anchor point ="CENTER"/>
+		</Anchors>
+		<Scripts>
+		<OnMouseDown>
+			BKWMove()
+		</OnMouseDown>
+		<OnMouseUp>
+			BadKittyWarnings:StopMovingOrSizing()
+		</OnMouseUp>
+		<OnDragStop>
+			BadKittyWarnings:StopMovingOrSizing()
+		</OnDragStop>
+		<OnShow>
+			BadKitty_CatWarningShape(BadKittySaves[14])
+		</OnShow>
+		</Scripts>
+		<Layers>
+			<Layer level="BACKGROUND">
+				<Texture name="$parent_Background" setAllPoints="true">
+					<Color r=".1" g=".1" b=".1" a="0" /> 
+				</Texture>
+			</Layer>
+		</Layers>
+		<Frames>
+			<Frame name="BKWMoveFrame" toplevel="true" alpha="0.7">
+				<Size>
+					<AbsDimension x="150" y="150" />
+				</Size>
+				
+				<Anchors>
+					<Anchor point ="TOPLEFT" relativeto="BadKittyWarnings"/>
+				</Anchors>
+				<Scripts>
+				<OnMouseDown>
+					BKWMove()
+				</OnMouseDown>
+				<OnMouseUp>
+					BadKittyWarnings:StopMovingOrSizing()
+				</OnMouseUp>
+				<OnDragStop>
+					BadKittyWarnings:StopMovingOrSizing()
+				</OnDragStop>
+				</Scripts>
+				<Layers>
+					<Layer level="BACKGROUND">
+						<Texture name="$parent_Background" setAllPoints="true">
+							<Color r="0" g="0" b="0.5" a="0.7" /> 
+						</Texture>
+					</Layer>
+					<Layer level="OVERLAY">
+						<FontString name="$parentText" inherits="GameFontNormal" text="CAT"/>
+					</Layer>
+				</Layers>
+			</Frame>
+			<Frame name="BKW1" toplevel="true" alpha="0.5">
+				<Size>
+					<AbsDimension x="50" y="50" />
+				</Size>
+				<Anchors>
+					<Anchor point ="TOPLEFT" relativepoint="TOPLEFT"/>
+				</Anchors>
+				<Layers>
+					
+					<Layer level="OVERLAY">
+						<FontString name="$parentText" inherits="GameFontNormal"/>
+					</Layer>
+				</Layers>
+					<Backdrop bgFile="Interface/Icons/Ability_Druid_Mangle2" tile="false">
+					</Backdrop>
+				<Scripts>
+				<OnMouseDown>
+					BKWMove()
+				</OnMouseDown>
+				<OnMouseUp>
+					BadKittyWarnings:StopMovingOrSizing()
+				</OnMouseUp>
+				<OnDragStop>
+					BadKittyWarnings:StopMovingOrSizing()
+				</OnDragStop>
+				</Scripts>
+			</Frame>
+			<Frame name="BKW2" toplevel="true" alpha="0.5">
+				<Size>
+					<AbsDimension x="50" y="50" />
+				</Size>
+				<Anchors>
+					<Anchor point ="TOP" relativepoint="BOTTOM" relativeto="BKW1"/>
+				</Anchors>
+				<Layers>
+					<Layer level="OVERLAY">
+						<FontString name="$parentText" inherits="GameFontNormal" />
+					</Layer>
+				</Layers>
+					<Backdrop bgFile="Interface/Icons/Ability_Druid_SkinTeeth" tile="false">
+					</Backdrop>
+				<Scripts>
+				<OnMouseDown>
+					BKWMove()
+				</OnMouseDown>
+				<OnMouseUp>
+					BadKittyWarnings:StopMovingOrSizing()
+				</OnMouseUp>
+				<OnDragStop>
+					BadKittyWarnings:StopMovingOrSizing()
+				</OnDragStop>
+				</Scripts>
+			</Frame>
+			<Frame name="BKW3" toplevel="true" alpha="0.5">
+				<Size>
+					<AbsDimension x="50" y="50" />
+				</Size>
+				<Anchors>
+					<Anchor point ="TOP" relativepoint="BOTTOM" relativeto="BKW2"/>
+				</Anchors>
+				<Layers>
+					<Layer level="OVERLAY">
+						<FontString name="$parentText" inherits="GameFontNormal" />
+					</Layer>
+				</Layers>
+					<Backdrop bgFile="Interface/Icons/Ability_Druid_Disembowel" tile="false">
+					</Backdrop>
+				<Scripts>
+				<OnMouseDown>
+					BKWMove()
+				</OnMouseDown>
+				<OnMouseUp>
+					BadKittyWarnings:StopMovingOrSizing()
+				</OnMouseUp>
+				<OnDragStop>
+					BadKittyWarnings:StopMovingOrSizing()
+				</OnDragStop>
+				</Scripts>
+			</Frame>
+			<Frame name="BKW4" toplevel="true" alpha="0.5">
+				<Size>
+					<AbsDimension x="50" y="50" />
+				</Size>
+				<Anchors>
+					<Anchor point ="TOP" relativepoint="TOP"/>
+				</Anchors>
+				<Layers>
+					<Layer level="OVERLAY">
+						<FontString name="$parentText" inherits="GameFontNormal" />
+					</Layer>
+				</Layers>
+					<Backdrop bgFile="Interface/Icons/Ability_GhoulFrenzy" tile="false">
+					</Backdrop>
+				<Scripts>
+				<OnMouseDown>
+					BKWMove()
+				</OnMouseDown>
+				<OnMouseUp>
+					BadKittyWarnings:StopMovingOrSizing()
+				</OnMouseUp>
+				<OnDragStop>
+					BadKittyWarnings:StopMovingOrSizing()
+				</OnDragStop>
+				</Scripts>
+			</Frame>
+			<Frame name="BKW5" toplevel="true" alpha="0.5">
+				<Size>
+					<AbsDimension x="50" y="50" />
+				</Size>
+				<Anchors>
+					<Anchor point ="TOP" relativepoint="BOTTOM" relativeto="BKW4"/>
+				</Anchors>
+				<Layers>
+					<Layer level="OVERLAY">
+						<FontString name="$parentText" inherits="GameFontNormal" />
+					</Layer>
+				</Layers>
+					<Backdrop bgFile="Interface/Icons/Spell_Nature_FaerieFire" tile="false">
+					</Backdrop>
+				<Scripts>
+				<OnMouseDown>
+					BKWMove()
+				</OnMouseDown>
+				<OnMouseUp>
+					BadKittyWarnings:StopMovingOrSizing()
+				</OnMouseUp>
+				<OnDragStop>
+					BadKittyWarnings:StopMovingOrSizing()
+				</OnDragStop>
+				</Scripts>
+			</Frame>
+			<Frame name="BKW6" toplevel="true" alpha="0.5">
+				<Size>
+					<AbsDimension x="50" y="50" />
+				</Size>
+				<Anchors>
+					<Anchor point ="TOP" relativepoint="BOTTOM" relativeto="BKW5"/>
+				</Anchors>
+				<Layers>
+					<Layer level="OVERLAY">
+						<FontString name="$parentText" inherits="GameFontNormal" />
+					</Layer>
+				</Layers>
+					<Backdrop bgFile="Interface/Icons/Spell_Shadow_ManaBurn" tile="false">
+					</Backdrop>
+				<Scripts>
+				<OnMouseDown>
+					BKWMove()
+				</OnMouseDown>
+				<OnMouseUp>
+					BadKittyWarnings:StopMovingOrSizing()
+				</OnMouseUp>
+				<OnDragStop>
+					BadKittyWarnings:StopMovingOrSizing()
+				</OnDragStop>
+				</Scripts>
+			</Frame>
+			<Frame name="BKW7" toplevel="true" alpha="0.5">
+				<Size>
+					<AbsDimension x="50" y="50" />
+				</Size>
+				<Anchors>
+					<Anchor point ="TOPRIGHT" relativepoint="TOPRIGHT" relativeto="BadKittyWarnings"/>
+				</Anchors>
+				<Layers>
+					<Layer level="OVERLAY">
+						<FontString name="$parentText" inherits="GameFontNormal" />
+					</Layer>
+				</Layers>
+					<Backdrop bgFile="Interface/Icons/Ability_Mount_JungleTiger" tile="false">
+					</Backdrop>
+				<Scripts>
+				<OnMouseDown>
+					BKWMove()
+				</OnMouseDown>
+				<OnMouseUp>
+					BadKittyWarnings:StopMovingOrSizing()
+				</OnMouseUp>
+				<OnDragStop>
+					BadKittyWarnings:StopMovingOrSizing()
+				</OnDragStop>
+				</Scripts>
+			</Frame>
+			<Frame name="BKW8" toplevel="true" alpha="0.5">
+				<Size>
+					<AbsDimension x="50" y="50" />
+				</Size>
+				<Anchors>
+					<Anchor point ="TOP" relativepoint="BOTTOM" relativeto="BKW7"/>
+				</Anchors>
+				<Layers>
+					<Layer level="OVERLAY">
+						<FontString name="$parentText" inherits="GameFontNormal" />
+					</Layer>
+				</Layers>
+					<Backdrop bgFile="Interface/Icons/Ability_Druid_Berserk" tile="false">
+					</Backdrop>
+				<Scripts>
+				<OnMouseDown>
+					BKWMove()
+				</OnMouseDown>
+				<OnMouseUp>
+					BadKittyWarnings:StopMovingOrSizing()
+				</OnMouseUp>
+				<OnDragStop>
+					BadKittyWarnings:StopMovingOrSizing()
+				</OnDragStop>
+				</Scripts>
+			</Frame>
+			<Frame name="BKW9" toplevel="true" alpha="0.5">
+				<Size>
+					<AbsDimension x="50" y="50" />
+				</Size>
+				<Anchors>
+					<Anchor point ="TOP" relativepoint="BOTTOM" relativeto="BKW8"/>
+				</Anchors>
+				<Layers>
+					<Layer level="OVERLAY">
+						<FontString name="$parentText" inherits="GameFontNormal" />
+					</Layer>
+				</Layers>
+					<Backdrop bgFile="Interface/Icons/Spell_Shadow_VampiricAura" tile="false">
+					</Backdrop>
+				<Scripts>
+				<OnMouseDown>
+					BKWMove()
+				</OnMouseDown>
+				<OnMouseUp>
+					BadKittyWarnings:StopMovingOrSizing()
+				</OnMouseUp>
+				<OnDragStop>
+					BadKittyWarnings:StopMovingOrSizing()
+				</OnDragStop>
+				</Scripts>
+			</Frame>
+			<Frame name="BKW10" toplevel="true" alpha="0.5" enableMouse="false">
+				<Size>
+					<AbsDimension x="50" y="50" />
+				</Size>
+				<Anchors>
+					<Anchor point ="TOP" relativepoint="BOTTOM" relativeto="BKW9"/>
+				</Anchors>
+				<Layers>
+					<Layer level="OVERLAY">
+						<FontString name="$parentText" inherits="GameFontNormal" />
+					</Layer>
+				</Layers>
+					<Backdrop bgFile="Interface/Icons/Spell_Shadow_VampiricAura" tile="false">
+					</Backdrop>
+				<Scripts>
+				<OnMouseDown>
+					BKWMove()
+				</OnMouseDown>
+				<OnMouseUp>
+					BadKittyWarnings:StopMovingOrSizing()
+				</OnMouseUp>
+				<OnDragStop>
+					BadKittyWarnings:StopMovingOrSizing()
+				</OnDragStop>
+				</Scripts>
+			</Frame>
+			<Frame name="BKW11" toplevel="true" alpha="0.5" enableMouse="false">
+				<Size>
+					<AbsDimension x="50" y="50" />
+				</Size>
+				<Anchors>
+					<Anchor point ="TOP" relativepoint="BOTTOM" relativeto="BKW10"/>
+				</Anchors>
+				<Layers>
+					<Layer level="OVERLAY">
+						<FontString name="$parentText" inherits="GameFontNormal" />
+					</Layer>
+				</Layers>
+					<Backdrop bgFile="Interface/Icons/Spell_Shadow_VampiricAura" tile="false">
+					</Backdrop>
+				<Scripts>
+				<OnMouseDown>
+					BKWMove()
+				</OnMouseDown>
+				<OnMouseUp>
+					BadKittyWarnings:StopMovingOrSizing()
+				</OnMouseUp>
+				<OnDragStop>
+					BadKittyWarnings:StopMovingOrSizing()
+				</OnDragStop>
+				</Scripts>
+			</Frame>
+			<Frame name="BKW12" toplevel="true" alpha="0.5" enableMouse="false">
+				<Size>
+					<AbsDimension x="50" y="50" />
+				</Size>
+				<Anchors>
+					<Anchor point ="TOP" relativepoint="BOTTOM" relativeto="BKW11"/>
+				</Anchors>
+				<Layers>
+					<Layer level="OVERLAY">
+						<FontString name="$parentText" inherits="GameFontNormal" />
+					</Layer>
+				</Layers>
+					<Backdrop bgFile="Interface/Icons/Spell_Shadow_VampiricAura" tile="false">
+					</Backdrop>
+				<Scripts>
+				<OnMouseDown>
+					BKWMove()
+				</OnMouseDown>
+				<OnMouseUp>
+					BadKittyWarnings:StopMovingOrSizing()
+				</OnMouseUp>
+				<OnDragStop>
+					BadKittyWarnings:StopMovingOrSizing()
+				</OnDragStop>
+				</Scripts>
+			</Frame>
+			<Frame name="BKW13" toplevel="true" alpha="0.5" enableMouse="false">
+				<Size>
+					<AbsDimension x="50" y="50" />
+				</Size>
+				<Anchors>
+					<Anchor point ="TOP" relativepoint="BOTTOM" relativeto="BKW12"/>
+				</Anchors>
+				<Layers>
+					<Layer level="OVERLAY">
+						<FontString name="$parentText" inherits="GameFontNormal" />
+					</Layer>
+				</Layers>
+					<Backdrop bgFile="Interface/Icons/Spell_Shadow_VampiricAura" tile="false">
+					</Backdrop>
+				<Scripts>
+				<OnMouseDown>
+					BKWMove()
+				</OnMouseDown>
+				<OnMouseUp>
+					BadKittyWarnings:StopMovingOrSizing()
+				</OnMouseUp>
+				<OnDragStop>
+					BadKittyWarnings:StopMovingOrSizing()
+				</OnDragStop>
+				</Scripts>
+			</Frame>
+		</Frames>
+	</Frame>
+	
+	<!--
+	
+			Bear Bars
+		
+		
+	-->
+	
+	<Frame name="BadKittyBear" movable="true" toplevel="true" parent="UIParent">
+
+		<Size>
+		<AbsDimension x="100" y="45" />
+		</Size>
+	
+		<Anchors>
+			<Anchor point ="CENTER"/>
+		</Anchors>
+	
+		<Layers>
+			<Layer level="BACKGROUND">
+				<Texture name="$parent_Background" setAllPoints="true">
+					<Color r=".1" g=".1" b=".1" a="0.5" /> 
+				</Texture>
+			</Layer>
+		</Layers> 
+	
+		<Scripts>
+				
+			<OnMouseDown>
+				BKBMove()
+			</OnMouseDown>
+			<OnMouseUp>
+				BadKittyBear:StopMovingOrSizing()
+				this:StopMovingOrSizing()
+			</OnMouseUp>
+			<OnDragStop>
+				BadKittyBear:StopMovingOrSizing()
+				this:StopMovingOrSizing()
+			</OnDragStop>
+		
+		</Scripts>
+		
+		<Frames>
+		<Statusbar name="BKBvirtualbar" virtual="true" inherits="TestStatusBar">
+			<Scripts>
+				<OnMouseDown>
+					BKBMove()
+				</OnMouseDown>
+				<OnMouseUp>
+					BadKittyBear:StopMovingOrSizing()
+					this:StopMovingOrSizing()
+				</OnMouseUp>
+				<OnDragStop>
+					BadKittyBear:StopMovingOrSizing()
+					this:StopMovingOrSizing()
+				</OnDragStop>
+			</Scripts>
+		</Statusbar>
+		<Statusbar name="$parentBar1" toplevel="false" inherits="BKBvirtualbar">
+			<Size x="100" y="15"/>
+			<Layers>
+				<Layer level="OVERLAY">
+					<FontString name="$parentText" justifyH="LEFT" inherits="GameFontNormal" />
+					<FontString name="$parentSecs" justifyH="RIGHT" inherits="GameFontNormal" />
+				</Layer>
+			</Layers>
+			<Anchors>
+				<Anchor point="TOP" relativepoint="TOP">
+					<Offset>
+						<AbsDimension x="0" y="0" />
+					</Offset>
+				</Anchor>
+			</Anchors>
+			<BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
+			<BarColor r="0" g="0" b="1" a="1" />
+			<Scripts>
+				<OnLoad>
+					this:SetMinMaxValues(0,40)
+				</OnLoad>
+				</Scripts>
+		</Statusbar>
+		<Statusbar name="$parentBar2" toplevel="false" inherits="BKBvirtualbar">
+			<Size x="100" y="15"/>
+			<Layers>
+				<Layer level="OVERLAY">
+					<FontString name="$parentText" justifyH="LEFT" inherits="GameFontNormal" />
+					<FontString name="$parentSecs" justifyH="RIGHT" inherits="GameFontNormal" />
+				</Layer>
+			</Layers>
+			<Anchors>
+				<Anchor point="TOP" relativepoint="TOP">
+					<Offset>
+						<AbsDimension x="0" y="-15" />
+					</Offset>
+				</Anchor>
+			</Anchors>
+			<BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
+			<BarColor r="0" g="0" b="1" a="1" />
+			<Scripts>
+				<OnLoad>
+					this:SetMinMaxValues(0,40)
+				</OnLoad>
+				</Scripts>
+		</Statusbar>
+		<Statusbar name="$parentBar3" toplevel="false" inherits="BKBvirtualbar">
+			<Size x="100" y="15"/>
+			<Layers>
+				<Layer level="OVERLAY">
+					<FontString name="$parentText" justifyH="LEFT" inherits="GameFontNormal" />
+					<FontString name="$parentSecs" justifyH="RIGHT" inherits="GameFontNormal" />
+				</Layer>
+			</Layers>
+			<Anchors>
+				<Anchor point="TOP" relativepoint="TOP">
+					<Offset>
+						<AbsDimension x="0" y="-30" />
+					</Offset>
+				</Anchor>
+			</Anchors>
+			<BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
+			<BarColor r="0" g="0" b="1" a="1" />
+			<Scripts>
+				<OnLoad>
+					this:SetMinMaxValues(0,40)
+				</OnLoad>
+				</Scripts>
+		</Statusbar>
+		<Statusbar name="$parentBar4" toplevel="false" inherits="BKBvirtualbar">
+			<Size x="100" y="15"/>
+			<Layers>
+				<Layer level="OVERLAY">
+					<FontString name="$parentText" justifyH="LEFT" inherits="GameFontNormal" />
+					<FontString name="$parentSecs" justifyH="RIGHT" inherits="GameFontNormal" />
+				</Layer>
+			</Layers>
+			<Anchors>
+				<Anchor point="TOP" relativepoint="TOP">
+					<Offset>
+						<AbsDimension x="0" y="-45" />
+					</Offset>
+				</Anchor>
+			</Anchors>
+			<BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
+			<BarColor r="0" g="0" b="1" a="1" />
+			<Scripts>
+				<OnLoad>
+					this:SetMinMaxValues(0,40)
+				</OnLoad>
+				</Scripts>
+		</Statusbar>
+		<Statusbar name="$parentBar5" toplevel="false" inherits="BKBvirtualbar">
+			<Size x="100" y="15"/>
+			<Layers>
+				<Layer level="OVERLAY">
+					<FontString name="$parentText" justifyH="LEFT" inherits="GameFontNormal" />
+					<FontString name="$parentSecs" justifyH="RIGHT" inherits="GameFontNormal" />
+				</Layer>
+			</Layers>
+			<Anchors>
+				<Anchor point="TOP" relativepoint="TOP">
+					<Offset>
+						<AbsDimension x="0" y="-60" />
+					</Offset>
+				</Anchor>
+			</Anchors>
+			<BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
+			<BarColor r="0" g="0" b="1" a="1" />
+			<Scripts>
+				<OnLoad>
+					this:SetMinMaxValues(0,40)
+				</OnLoad>
+				</Scripts>
+		</Statusbar>
+		<Statusbar name="$parentBar6" toplevel="false" inherits="BKBvirtualbar">
+			<Size x="100" y="15"/>
+			<Layers>
+				<Layer level="OVERLAY">
+					<FontString name="$parentText" justifyH="LEFT" inherits="GameFontNormal" />
+					<FontString name="$parentSecs" justifyH="RIGHT" inherits="GameFontNormal" />
+				</Layer>
+			</Layers>
+			<Anchors>
+				<Anchor point="TOP" relativepoint="TOP">
+					<Offset>
+						<AbsDimension x="0" y="-75" />
+					</Offset>
+				</Anchor>
+			</Anchors>
+			<BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
+			<BarColor r="0" g="0" b="1" a="1" />
+			<Scripts>
+				<OnLoad>
+					this:SetMinMaxValues(0,40)
+				</OnLoad>
+				</Scripts>
+		</Statusbar>
+		<Statusbar name="$parentBar7" toplevel="false" inherits="BKBvirtualbar">
+			<Size x="100" y="15"/>
+			<Layers>
+				<Layer level="OVERLAY">
+					<FontString name="$parentText" justifyH="LEFT" inherits="GameFontNormal" />
+					<FontString name="$parentSecs" justifyH="RIGHT" inherits="GameFontNormal" />
+				</Layer>
+			</Layers>
+			<Anchors>
+				<Anchor point="TOP" relativepoint="TOP">
+					<Offset>
+						<AbsDimension x="0" y="-90" />
+					</Offset>
+				</Anchor>
+			</Anchors>
+			<BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
+			<BarColor r="0" g="0" b="1" a="1" />
+			<Scripts>
+				<OnLoad>
+					this:SetMinMaxValues(0,40)
+				</OnLoad>
+				</Scripts>
+		</Statusbar>
+		<Frame name="BKBearOOCFrame" toplevel="true" parent="UIParent">
+			<Size>
+				<AbsDimension x="100" y="100" />
+			</Size>
+			<Anchors>
+				<Anchor point ="TOPLEFT" relativeTo="BadKittyBear" relativepoint="TOPLEFT"/>
+			</Anchors>
+				<Backdrop bgFile="Interface/Icons/Spell_Shadow_ManaBurn" tile="false">
+				</Backdrop>
+		</Frame>
+		<Frame name="BadKittyBearIcon1">
+			<Size>
+				<AbsDimension x="15" y="15" />
+			</Size>
+			<Backdrop bgFile="Interface/Icons/Spell_Shadow_ManaBurn" tile="false">
+			</Backdrop>
+			<Anchors>
+				<Anchor point="TOPRIGHT" relativepoint="TOPLEFT" relativeTo="BadKittyBearBar1"/>
+			</Anchors>
+		</Frame>
+		<Frame name="BadKittyBearIcon2">
+			<Size>
+				<AbsDimension x="15" y="15" />
+			</Size>
+			<Backdrop bgFile="Interface/Icons/Spell_Shadow_ManaBurn" tile="false">
+			</Backdrop>
+			<Anchors>
+				<Anchor point="TOPRIGHT" relativepoint="TOPLEFT" relativeTo="BadKittyBearBar2"/>
+			</Anchors>
+		</Frame>
+		<Frame name="BadKittyBearIcon3">
+			<Size>
+				<AbsDimension x="15" y="15" />
+			</Size>
+			<Backdrop bgFile="Interface/Icons/Spell_Shadow_ManaBurn" tile="false">
+			</Backdrop>
+			<Anchors>
+				<Anchor point="TOPRIGHT" relativepoint="TOPLEFT" relativeTo="BadKittyBearBar3"/>
+			</Anchors>
+		</Frame>
+		<Frame name="BadKittyBearIcon4">
+			<Size>
+				<AbsDimension x="15" y="15" />
+			</Size>
+			<Backdrop bgFile="Interface/Icons/Spell_Shadow_ManaBurn" tile="false">
+			</Backdrop>
+			<Anchors>
+				<Anchor point="TOPRIGHT" relativepoint="TOPLEFT" relativeTo="BadKittyBearBar4"/>
+			</Anchors>
+		</Frame>
+		<Frame name="BadKittyBearIcon5">
+			<Size>
+				<AbsDimension x="15" y="15" />
+			</Size>
+			<Backdrop bgFile="Interface/Icons/Spell_Shadow_ManaBurn" tile="false">
+			</Backdrop>
+			<Anchors>
+				<Anchor point="TOPRIGHT" relativepoint="TOPLEFT" relativeTo="BadKittyBearBar5"/>
+			</Anchors>
+		</Frame>
+		<Frame name="BadKittyBearIcon6">
+			<Size>
+				<AbsDimension x="15" y="15" />
+			</Size>
+			<Backdrop bgFile="Interface/Icons/Spell_Shadow_ManaBurn" tile="false">
+			</Backdrop>
+			<Anchors>
+				<Anchor point="TOPRIGHT" relativepoint="TOPLEFT" relativeTo="BadKittyBearBar6"/>
+			</Anchors>
+		</Frame>
+		<Frame name="BadKittyBearIcon7">
+			<Size>
+				<AbsDimension x="15" y="15" />
+			</Size>
+			<Backdrop bgFile="Interface/Icons/Spell_Shadow_ManaBurn" tile="false">
+			</Backdrop>
+			<Anchors>
+				<Anchor point="TOPRIGHT" relativepoint="TOPLEFT" relativeTo="BadKittyBearBar7"/>
+			</Anchors>
+		</Frame>
+		</Frames>
+	</Frame>
+	<!--
+	
+			Bear Warnings
+		
+		
+	-->
+	<Frame name="BadKittyBearWarnings" movable="true" parent="UIParent" toplevel="true">
+		<Size>
+			<AbsDimension x="100" y="150" />
+		</Size>
+		
+		<Anchors>
+			<Anchor point ="CENTER"/>
+		</Anchors>
+		<Scripts>
+		<OnMouseDown>
+			BKWBearMove()
+		</OnMouseDown>
+		<OnMouseUp>
+			BadKittyBearWarnings:StopMovingOrSizing()
+		</OnMouseUp>
+		<OnDragStop>
+			BadKittyBearWarnings:StopMovingOrSizing()
+		</OnDragStop>
+		<OnShow>
+			if BadKittySaves[3] then BadKitty_BearWarningShape(BadKittySaves[15]) end
+		</OnShow>
+		</Scripts>
+		<Layers>
+			<Layer level="BACKGROUND">
+				<Texture name="$parent_Background" setAllPoints="true">
+					<Color r=".1" g=".1" b=".1" a="0" /> 
+				</Texture>
+			</Layer>
+		</Layers>
+		<Frames>
+			<Frame name="BKWBearMoveFrame" toplevel="true" alpha="0.7">
+				<Size>
+					<AbsDimension x="100" y="150" />
+				</Size>
+				
+				<Anchors>
+					<Anchor point ="TOPLEFT" relativeto="BadKittyBearWarnings"/>
+				</Anchors>
+				<Scripts>
+				<OnMouseDown>
+					BKWBearMove()
+				</OnMouseDown>
+				<OnMouseUp>
+					BadKittyBearWarnings:StopMovingOrSizing()
+				</OnMouseUp>
+				<OnDragStop>
+					BadKittyBearWarnings:StopMovingOrSizing()
+				</OnDragStop>
+				</Scripts>
+				<Layers>
+					<Layer level="BACKGROUND">
+						<Texture name="$parent_Background" setAllPoints="true">
+							<Color r="0" g="0" b="0.5" a="0.7" /> 
+						</Texture>
+					</Layer>
+					<Layer level="OVERLAY">
+						<FontString name="$parentText" inherits="GameFontNormal" text="Bear"/>
+					</Layer>
+				</Layers>
+			</Frame>
+			<Frame name="BKWBear1" toplevel="true" alpha="0.5">
+				<Size>
+					<AbsDimension x="50" y="50" />
+				</Size>
+				<Anchors>
+					<Anchor point ="TOPRIGHT" relativepoint="TOPRIGHT"/>
+				</Anchors>
+				<Layers>
+					<Layer level="OVERLAY">
+						<FontString name="$parentText" inherits="GameFontNormal"/>
+					</Layer>
+				</Layers>
+					<Backdrop bgFile="Interface/Icons/Ability_Druid_Mangle2" tile="false">
+					</Backdrop>
+				<Scripts>
+				<OnMouseDown>
+					BKWBearMove()
+				</OnMouseDown>
+				<OnMouseUp>
+					BadKittyBearWarnings:StopMovingOrSizing()
+				</OnMouseUp>
+				<OnDragStop>
+					BadKittyBearWarnings:StopMovingOrSizing()
+				</OnDragStop>
+				</Scripts>
+			</Frame>
+			<Frame name="BKWBear2" toplevel="true" alpha="0.5">
+				<Size>
+					<AbsDimension x="50" y="50" />
+				</Size>
+				<Anchors>
+					<Anchor point ="TOPLEFT" relativepoint="TOPLEFT"/>
+				</Anchors>
+				<Layers>
+					<Layer level="OVERLAY">
+						<FontString name="$parentText" inherits="GameFontNormal"/>
+					</Layer>
+				</Layers>
+					<Backdrop bgFile="Interface/Icons/Ability_Druid_Lacerate" tile="false">
+					</Backdrop>
+				<Scripts>
+				<OnMouseDown>
+					BKWBearMove()
+				</OnMouseDown>
+				<OnMouseUp>
+					BadKittyBearWarnings:StopMovingOrSizing()
+				</OnMouseUp>
+				<OnDragStop>
+					BadKittyBearWarnings:StopMovingOrSizing()
+				</OnDragStop>
+				</Scripts>
+			</Frame>
+			<Frame name="BKWBear3" toplevel="true" alpha="0.5">
+				<Size>
+					<AbsDimension x="50" y="50" />
+				</Size>
+				<Anchors>
+					<Anchor point ="LEFT" relativepoint="LEFT"/>
+				</Anchors>
+				<Layers>
+					<Layer level="OVERLAY">
+						<FontString name="$parentText" inherits="GameFontNormal"/>
+					</Layer>
+				</Layers>
+					<Backdrop bgFile="Interface/Icons/Ability_Druid_DemoralizingRoar" tile="false">
+					</Backdrop>
+				<Scripts>
+				<OnMouseDown>
+					BKWBearMove()
+				</OnMouseDown>
+				<OnMouseUp>
+					BadKittyBearWarnings:StopMovingOrSizing()
+				</OnMouseUp>
+				<OnDragStop>
+					BadKittyBearWarnings:StopMovingOrSizing()
+				</OnDragStop>
+				</Scripts>
+			</Frame>
+			<Frame name="BKWBear4" toplevel="true" alpha="0.5">
+				<Size>
+					<AbsDimension x="50" y="50" />
+				</Size>
+				<Anchors>
+					<Anchor point ="RIGHT" relativepoint="RIGHT"/>
+				</Anchors>
+				<Layers>
+					<Layer level="OVERLAY">
+						<FontString name="$parentText" inherits="GameFontNormal"/>
+					</Layer>
+				</Layers>
+					<Backdrop bgFile="Interface/Icons/Spell_Nature_StoneClawTotem" tile="false">
+					</Backdrop>
+				<Scripts>
+				<OnMouseDown>
+					BKWBearMove()
+				</OnMouseDown>
+				<OnMouseUp>
+					BadKittyBearWarnings:StopMovingOrSizing()
+				</OnMouseUp>
+				<OnDragStop>
+					BadKittyBearWarnings:StopMovingOrSizing()
+				</OnDragStop>
+				</Scripts>
+			</Frame>
+			<Frame name="BKWBear5" toplevel="true" alpha="0.5">
+				<Size>
+					<AbsDimension x="50" y="50" />
+				</Size>
+				<Anchors>
+					<Anchor point ="BOTTOMRIGHT" relativepoint="BOTTOMRIGHT"/>
+				</Anchors>
+				<Layers>
+					<Layer level="OVERLAY">
+						<FontString name="$parentText" inherits="GameFontNormal"/>
+					</Layer>
+				</Layers>
+					<Backdrop bgFile="Interface/Icons/Ability_Druid_Berserk" tile="false">
+					</Backdrop>
+				<Scripts>
+				<OnMouseDown>
+					BKWBearMove()
+				</OnMouseDown>
+				<OnMouseUp>
+					BadKittyBearWarnings:StopMovingOrSizing()
+				</OnMouseUp>
+				<OnDragStop>
+					BadKittyBearWarnings:StopMovingOrSizing()
+				</OnDragStop>
+				</Scripts>
+			</Frame>
+			<Frame name="BKWBear6" toplevel="true" alpha="0.5">
+				<Size>
+					<AbsDimension x="50" y="50" />
+				</Size>
+				<Anchors>
+					<Anchor point ="BOTTOMLEFT" relativepoint="BOTTOMLEFT"/>
+				</Anchors>
+				<Layers>
+					<Layer level="OVERLAY">
+						<FontString name="$parentText" inherits="GameFontNormal"/>
+					</Layer>
+				</Layers>
+					<Backdrop bgFile="Interface/Icons/Spell_Nature_FaerieFire" tile="false">
+					</Backdrop>
+				<Scripts>
+				<OnMouseDown>
+					BKWBearMove()
+				</OnMouseDown>
+				<OnMouseUp>
+					BadKittyBearWarnings:StopMovingOrSizing()
+				</OnMouseUp>
+				<OnDragStop>
+					BadKittyBearWarnings:StopMovingOrSizing()
+				</OnDragStop>
+				</Scripts>
+			</Frame>
+		</Frames>
+	</Frame>
+</Ui> 
